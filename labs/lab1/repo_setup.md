@@ -7,10 +7,18 @@ summary: GIT gud
 sidebar: home_sidebar
 ---
 
+{:class="important"}
+**Note for JKCC and D2 computers**
+
+To keep projects saved on your account you need to put them on the H:\ drive. **However, to work you need to have your current project on the C:\ drive** So, I would advise that you copy or clone your project in the C:\ drive before starting to work.
+
+<br>
+<br>
+
 You will need Git installed. You can use a Git GUI (e.g sourcetree). However I will work with and show the cmd-line commands.
 
-### Create a repo
-When get onto move advanced topics, we will provide some code for you. For now you should create a blank Git repo on you Git host of choice ([Github](github.com), [BitBucket](bitbucket.org), or Napier's Gitlab: [gitgud.napier.ac.uk](gitgud.napier.ac.uk) )
+## Create a repo
+When get onto move advanced topics, we will provide some code for you. For now you should create a blank Git repo on you Git host of choice ([Github](github.com), [BitBucket](bitbucket.org)).
 
 For the rest of this process I'm assuming you are using GitHub.
 If you have not already created a GitHub account, create one and sign in.
@@ -20,7 +28,7 @@ If you have not already created a GitHub account, create one and sign in.
 ![newRepoprocess](assets/images/github_newrepo_1.png)
 ![NewRepoOptions](assets/images/github_newrepo_2.png)
 
-1. Give your repo a simple name and descriptive description
+1. Give your repo a simple name
 
 1. Check - Initialize with a readme
 
@@ -35,14 +43,19 @@ button and copy the link within the box
 
 ![Clone from Github](assets/images/github_clone.png)
 
-### Post-pandemic special: Getting GitHub Desktop
-So, usually we'd have everything you needed installed on the D2 machines. We still do, but you might not be there as much, or you might prefer your laptop. As such, you'll need to install GitHub Desktop onto your own machine. Here it is: [https://desktop.github.com/](https://desktop.github.com/). You can use Git directly if you like, but if you're new, I'd get the GUI. Once you've got that installed, make sure you also install Git, as described below.
+## Setting up the project with Git
 
-### Clone it
+### Get git from AppsAnywhere
 
-If you haven't installed Git on your pc yet, [go here](https://git-scm.com/downloads)
+(If you are on your own PC, go to the next section **Install Git** )
 
-Open a cmd (or git-bash) window somewhere (desktop is best). Now clone
+On the machine of the JKCC, you cannot install git but you can get it from AppsAnywhere. 
+
+Search for git in AppsAnywhere and launch it. Then, it will be available in the cmd line and PowerShell.
+
+### Clone the repo
+
+Open a cmd, PowerShell or git-bash window somewhere (desktop is best). Now clone
 your repo
 
 ```bash
@@ -74,9 +87,8 @@ Now we can Start to get to work properly.
 
 ### Setup project structure
 Create the following empty folders.
-* **res** - (where resources go, like images and fonts)
+* **resources** - (where resources go, like images and fonts)
 * **lib** - (libraries that we need)
-* **practical_1** - (source code for practical 1)
 
 #### .gitignore
 Next, create a **.gitignore** file, open with a text editor.
@@ -87,14 +99,61 @@ Navigate to [gitignore.io](https://gitignore.io) and create an ignore file for "
 We will be building SFML from source, which means we need to get the code.
 We will be doing this via Git Submodules, which makes it look  like the SFML code is now copied into your repo, but is actually saved a virtual link to the separate SFML repo.
 ```bash
-git submodule add https://github.com/SFML/SFML.git lib/sfml
-git submodule init
-git submodule update
-cd lib/sfml
-git checkout 2.6.1
+mkdir lib
+cd lib
+git submodule add https://github.com/SFML/SFML.git
+cd SFML
+git checkout 2.6.2
 cd ../..
 ```
 **Note, you need to be in the root directory of your repository for this to work!**
+
+## Install git (personal computer)
+
+1. Go on this [link](https://git-scm.com/downloads/win) and download **git for Windows**.
+2. Go in your download folder and move the downloaded file *Git-version-64-bit.exe* in your Home drive. So you don't have download it again.
+3. Launch the .exe file by double-clicking on it. Keep all the default options. 
+4. Launch git bash
+
+If everything goes well should have a command line poping up.
+
+## Setting Up the project without Git.
+
+
+If you do not have git installed on your machine and you cannot install it. It the case, at the moment on the JKCC machines. Then follow the instructions below. It is assumed that you have created an online repo.
+
+### Clone the repo
+
+- Open visual studio for appsanywhere: **Visual Studio Community 2022 C++ cli**.
+- Choose the option clone remote repository.
+- Copy paste the address of your repo in the first field
+- In the second field *path* put a folder in your H drive: `H:\any_folder_you_want\name_of_your_repo`
+
+At this stage you should have an empty project opened.
+
+Create two empty folder:
+* **resources** - (where resources go, like images and fonts)
+* **lib** - (libraries that we need)
+
+
+
+### Get SFML (Manually)
+
+- Go to the SFML github page https://github.com/SFML/SFML
+- On the right side of the page click on releases.
+- Scroll down to the version 2.6.2
+- In the assets section, download the **Source code (zip)**
+- Unzip it in your lib folder.
+
+Now you should be at the same stage than with git.
+
+{:class="important"}
+**Just be carefull to not push the SFML folder to your repo.**
+
+### For later, Push the code to the repo
+
+Without gitbash or cmd line, you can do it inside Visual Studio. 
+
 
 ---
 Next step: [build setup](build_setup)

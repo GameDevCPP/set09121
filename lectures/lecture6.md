@@ -14,7 +14,7 @@ presentationTheme: '/assets/revealJS/css/theme/napier.css'
 ### SET09121 - Games Engineering
 
 <br><br>
-Babis Koniaris
+Leni Le Goff
 <br>
 
 
@@ -24,85 +24,120 @@ School of Computing. Edinburgh Napier University
 ---
 
 # Recommended Reading:
-## Any C++ book really, but C++ Primer is good.
+- Any C++ book really, but C++ Primer is good.
+- Online resources:
+	- https://www.geeksforgeeks.org/cpp/c-plus-plus/
+	- http://www.learncpp.com
+- C++ references: https://en.cppreference.com
 
 
 ---
 
-# Goal
-## To learn object-orientation in C++
-
+## Object-Orientation in C++
 
 ---
 
-# Why you Need to Know Object-orientation in C++
+# Reminder on Structures 
 
-- We have defined our games using Formal Elements. <!-- .element: class="fragment" -->
-- We have also defined our game as a system. <!-- .element: class="fragment" -->
-- Our game system will be entity-based. <!-- .element: class="fragment" -->
-- All of these elements require us to define objects. <!-- .element: class="fragment" -->
-- You are also going to build one of the most complex systems you have undertaken at university. This requires breaking the system down into controllable components. This is what object-orientation is for. <!-- .element: class="fragment" -->
+- `struct` are generally used for composite types: collections of data.
+- `struct` members are declared between the curly brackets.
+- There isn't a widely used convention for `struct` naming but I will use *CamelCase*.
+- **Important** unlike functions, `struct` declaration finishes with a semi-colon.
 
+```cpp
+struct MyStruct
+{
+   int data_a;
+   double data_b;
+};
+```
 
----
-
-# Basics of Object-orientation in C++
-
-- You'll will see plenty of this in the labs <!-- .element: class="fragment" -->
-- Here we are going to talk about what some of that means <!-- .element: class="fragment" -->
+```cpp
+MyStruct s;
+s.data_a = 1;
+s.data_b = 0.35;
+```
+The `MyStruct s` instance contains both data_a and data_b. It contains a collections of variables
 
 ---
 
 # Declaring a class in C++
 
-- `class` declarations are simple in C++.
-- To declare a `class` in C++ we use the `class` keyword followed by the name of the `class`.
-- The declaration of the `class` is anything we put between the curly brackets.
-- **Note** - a semi-colon is required at the end of the declaration. This is different to Java and C\#.
-- **Note** - by default, class members are declared private.
+- It the same as a `struct` but using the `class` keyword
+- The naming convention for classes uses *CamelCase*
 
 ```cpp
-class my_class
+class MyClass
 {
-    // Members
+   int data_a;
+   double data_b;
 };
 ```
+<div class="fragment">
+`struct` and `class` are the same with one difference!
+</div>
+
+<div class="fragment">
+<pre><code class="language-cpp">
+MyClass a;
+a.data_a = 1;
+a.data_b = 0.35;
+</code></pre>
+<p>This code will throw compilation errors!</p>
+</div>
+
 
 ---
 
-# Declaring a struct in C++
+# Scope Protection
 
-- C++ also allows declarations of `struct` types.
-- `struct` declarations are also simple in C++.
-- To declare a `struct` in C++ we use the `struct` keyword followed by the name of the `struct`.
-- A `struct` is then the members declared between the curly brackets.
-- **Note** - by default, struct members are declared public.
-- **Note** - we typically use structs for collections of simple data.
+By default, `struct` has `public` visibility and `class` has `private` visibility.
+
+- We can specify the visibility of class members via `public`, `private`, and `protected` modifiers.
+- We define "zones" of visibility in C++ rather than individual values.
+- Start with public: most interesting part for users of class
+
+---
+
+# Scope Protection (Cont.)
 
 ```cpp
-struct my_struct
-{
-    // Members
-};
+    class MyClass
+    {
+        // This value is private.
+        int x;
+    public:
+        // The following are public.
+        some_method() { }
+        float n;
+    protected:
+        // The following are protected.
+        string _str;
+    private:
+        // Private again.
+        int _val;
+    };
 ```
+
+Often, in C++, private and protected members (attributes and functions) will have an underscore before their name.
 
 ---
 
 # Defining Attributes
 
 - Attributes are the values that go along with our objects.
-- C++ doesn't define the visibility per attribute (unlike Java & C#).
-    - We will look at visibility in a few slides.
+- By convention, attributes are define as private members.
 
 ```cpp
-class my_class
+class MyClass
 {
+private:
     // Object (instance) values.
-    float x; // uninitialised value
-    float y = 0.5f; // Initialised value
-    const string name; // Constant value
+    float _x; // uninitialised value
+    float _y = 0.5f; // Initialised value
+    const _string name; // Constant value
     // Class (static) values.
-    static int n;
+    static _int n;
 };
 ```
 
@@ -110,22 +145,27 @@ class my_class
 
 # Defining Methods
 
-- Same rules apply for methods.
+- Methods are the modifier or accessor of the object
+- **Note** Generally, the naming convention for variables, methods and functions is *snake_case*.
 
 ```cpp
-class my_class
+class MyClass
 {
+public:
     void do_something()
     {
         // Do something, that may change any member variables of this object.
     }
-    // Const methods do not change values of object.
-    float get_x() const
-    {
-        return x;
-    }
-    // Class (static) methods.
-    static int get_n() { return n; }
+    
+    //getters 
+    float get_x(){return _x;}
+    int get_n(){return _n;}
+    //setters
+    void set_x(float x){_x=x;}
+    void set_n(int n){_n=n;}
+private:
+    float _x;
+    int _n;
 };
 ```
 
@@ -140,14 +180,14 @@ class my_class
 - **Note** - add a print statement in a constructor, and observe all the times they're called!
 
 ```cpp
-class my_class
+class MyClass
 {
 public:
     // Default constructor
-    my_class() { }
+    MyClass() { }
     // Parameterised constructor
-    my_class(float xx, float yy)
-    : x(xx), y(yy) // Sets object attributes
+    MyClass(float x, float y)
+    : _x(x), _y(y) // Sets object attributes
     {
     }
 };
@@ -169,42 +209,45 @@ public:
 # Destructors in C++
 
 ```cpp
-class my_class
+class MyClass
 {
 public:
     // Default Destructor
-    ~my_class()
+    ~MyClass()
     {
         // Free up resources.
     }
 };
 ```
+**Do not declare and implement a destructor unless it is necessary**
 
 ---
 
-# Scope Protection
+# Headers!
 
-- We can specify the visibility of class members via `public`, `private`, and `protected` modifiers.
-- The difference between a `struct` and a `class` is just the default visibility. `struct` is `public`, `class` is `private`.
-- We define "zones" of visibility in C++ rather than individual values.
-- Start with public: most interesting part for users of class
+Remember header files?
 
+**Header files for definitions and Source files for implementation**
 
+```cpp
+//my_class.hpp
+class MyClass
+{
+public:
+    // Default constructor
+    MyClass();
+    // Parameterised constructor
+    MyClass(float x, float y);
+private:
+    float _x, _y;
+};
 ```
-    class my_class
-    {
-        // This value is private.
-        int x;
-    public:
-        // The following are public.
-        my_class() { }
-        float n;
-    protected:
-        // The following are protected.
-        string str;
-    private:
-        // Private again.
-    };
+
+```cpp
+//my_class.cpp
+#include <my_class.hpp> //include my definitions
+MyClass::MyClass(){}//The class define a namespace
+MyClass::MyClass(float x, float y):_x(x),_y(y){}
 ```
 
 ---
@@ -212,7 +255,9 @@ public:
 # RAII
 
 Our First Rule of Good OO in C++ - RAII
-- RAII stands for Resource Acquisition Is Initialisation. <!-- .element: class="fragment" -->
+
+*Resource Acquisition Is Initialisation*. 
+
 - It is a rule used in good C++ code. <!-- .element: class="fragment" -->
 - When an object is created it allocates or takes ownership of its required resources (via the constructor). <!-- .element: class="fragment" -->
 - When an object is destroyed it frees up its allocated and owned resources (via the destructor). <!-- .element: class="fragment" -->
@@ -224,44 +269,37 @@ Our First Rule of Good OO in C++ - RAII
 
 NOT RAII
 ```cpp
-void Main(){
+void main(){
     // Texture is a resource that has to be unloaded, e.g. via an UnloadTexture() function
-    Texture MarioTexture = LoadTexture("Mario.jpg"); 
-    Mario* mario = new Mario(MarioTexture);
+    Texture mario_texture = load_texture("Mario.jpg"); 
+    Mario mario(mario_texture);
     //--- some time later
-    delete mario;
-    CloseGame();
+    close_game();
     //Oh no - we forgot to unload the texture!
-}
+}//Mario is destroyed automatically
 ```
 
 RAII
 ```cpp
-void Main(){
+void main(){
     //Mario Loads his texture himself.
-    Mario* mario = new Mario("Mario.jpg");
+    Texture mario_texture = load_texture("Mario.jpg"); 
+    Mario mario(mario_texture);
     //--- some time later
-    delete mario; //mario unloads texture in his destructor.
-    CloseGame();
-}
+    unload_texture(mario_texture);
+    close_game();
+}//Mario is destroyed automatically
 
 ```
-RAII : Mario should clean up after himself!
 
 ---
 
-# Object-orientation Concepts in C++
+
+## Object-orientation Concepts in C++
 
 
 ---
 
-# Core Object-orientation Concepts
-
-- C++ is a multi-paradigm language, and it supports object-orientation well
-
-- There are effectively four main features that define if a language has object-orientation.
-
----
 
 # Core Object-orientation Concepts
 
@@ -269,13 +307,6 @@ RAII : Mario should clean up after himself!
 - **Abstraction**: the process of hiding implementation details and exposing only the essential characteristics and behaviours of an object, making it easier to understand and use.
 - **Inheritance**: the mechanism of creating a new class that reuses, extends, or modifies the attributes and behaviors of an existing class, allowing for a more efficient and organised code structure.
 - **Polymorphism**: the ability of an object or function (overloading) to take on multiple forms. With objects, we can use the same interface for different types. With functions, we can have different behaviour depending on passed parameters. It promotes code reusability and flexibility.
-
----
-
-# Think Back to the Labs
-
-- Have you already used some of these? <!-- .element: class="fragment" -->
-- What about the Pong or Space Invaders example? <!-- .element: class="fragment" -->
 
 ---
 
@@ -291,7 +322,6 @@ RAII : Mario should clean up after himself!
 
 # Encapsulation 
 
-
 - Hide the data, allow access through a well-defined interface
 - A trivial example looks pointless...
 
@@ -300,20 +330,21 @@ RAII : Mario should clean up after himself!
 class Player
 {
 	public:
-		
-		void setName(const std::string& zName) 
+		//setter for attribute _name
+		void set_name(const std::string& name) 
 		{
-			name = zName;
+			_name = name;
 		}
 		
-		const std::string& getName() const
+        //getter for attribute _name
+		const std::string& get_name() const
 		{
-			return name;
+			return _name;
 		}
 		
 	private:
 	
-		std::string name;
+		std::string _name;
 };
 ```
 
@@ -321,13 +352,11 @@ class Player
 
 # Encapsulation 
 
-
 - Slightly different example, no encapsulation
 - What if we have a texture that displays the player's name, e.g. shown above their head?
 - What happens if we call ```player.name = "Steve";``` 
 
 ```cpp
-
 class Player
 {
 	public:
@@ -335,7 +364,7 @@ class Player
 		std::string name;
 		// Rectangular texture that contains the name of the player
 		//	  useful for overlays, UI, etc
-		Texture nameTexture;
+		Texture name_texture;
 };
 ```
 
@@ -351,22 +380,22 @@ class Player
 class Player
 {
 	public:
-		void setName(const std::string& zName) 
+		void set_name(const std::string& name) 
 		{
-			name = zName;
-			updateNameTexture();
+			_name = name;
+			update_name_texture();
 		}
-		const std::string& getName() const
+		const std::string& get_name() const
 		{
-			return name;
+			return _name;
 		}
 	private:
-		void updateNameTexture()
+		void _update_name_texture()
 		{
-			nameTexture = CreateTextureFromText(name);
+			name_texture = create_texture_from_text(name);
 		}
-		std::string name;
-		Texture nameTexture;
+		std::string _name;
+		Texture _name_exture;
 };
 ```
 
@@ -392,22 +421,22 @@ class Player
 class Player
 {
 	public:
-		void setName(const std::string& zName) 
+		void set_name(const std::string& name) 
 		{
-			name = zName;
-			updateNameTexture();
+			_name = name;
+			update_name_texture();
 		}
-		const std::string& getName() const
+		const std::string& get_name() const
 		{
-			return name;
+			return _name;
 		}
 	private:
-		void updateNameTexture()
+		void _update_name_texture()
 		{
-			nameTexture = CreateTextureFromText(name);
+			name_texture = create_texture_from_text(name);
 		}
-		std::string name;
-		Texture nameTexture;
+		std::string _name;
+		Texture _name_exture;
 };
 ```
 
@@ -443,7 +472,7 @@ class Player
     {
     };
 
-    class Circle : public Shape
+    class Circle : public Shape 
     {
     };
 
@@ -457,7 +486,7 @@ class Player
 # Be Careful!
 
 - Avoid deep levels of inheritance. 
-- Avoid HAS-A relationships:
+- Try to identify what should be a *has-a* or an *is-a* relationships:
 
 ```cpp
 
@@ -480,61 +509,103 @@ class Player
 
 # Multiple-inheritance in C++
 
-- C++ does not have an interface definition as Java and C#.
-    - We can use abstract classes without data
 - Multiple-inheritance allows us to define a class as inheriting from more than one base-class.
-- It's ok if only one of the classes contains data, otherwise it's a **TERRIBLE** idea
+- In practice, it is better to avoid multiple-inheritance. It is generally a bad idea and can lead to major issues.
+- Multiple-inheritance is acceptable when the base classes are *abstract*.
+
+---
+
+# Example of bad Multiple-inheritance
 
 ```cpp
-    class CarEngine
-    {
-		int power;
-    };
-	
-	class SteeringWheel
-    {
-		float radius;
-    };
+// The Deadly Diamond of Death
+class A
+{ 
+public:
+    virtual void method_a();
+};
+class B : public A
+{
+public:
+    void method_a() override;
 
-    class TerribleCar : public CarEngine, public SteeringWheel
-    {
-    };
-	
-	
+};
+class C : public A
+{
+    void method_a() override;
+};
+class D : public B, public C
+{
+};
+
+int main(){
+    D d;
+    d.method_a(); // do this call c.method_a() or b.method_a()?
+    return 0;
+}
+
 ```
 
 ---
 
-# Multiple-inheritance in C++
+# `virtual` Members
 
-- This is ok
+- To mark a method as overridable in a derived-class we need to state that it is `virtual` in the base-class.
+    - Same as C\#; Java uses `abstract`.
+- When a method is `virtual` it means that it can be redefined in derived-classes
+- derived-classes can write their own implementation of the function, specifying it using `override`
+    - it's not a requirement, but DO IT
+
+
+
+---
+
+# `virtual` Members
 
 ```cpp
-    class IDrawable
+class A
+{
+public:
+    virtual void work()
     {
-		public:
-			virtual void Draw() = 0;
-    };
-	
-	class IPhysicsObject
+        std::cout << "Hello" << std::endl;
+    }
+};
+
+class B : public A
+{
+public:
+	// Compiler will check the
+    // override is valid.
+    void work() override
     {
-		public:
-			virtual void Update() = 0;
-    };
-	
-	class IEntity : public IDrawable, public IPhysicsObject
-    {
-    };    
-	
-	class GameEntity : IEntity
-    {
-		public:
-			void Draw() override { /*...*/}
-			void Update() override { /*...*/}
-    };
-	
-	
+        std::cout << "Goodbye" << std::endl;
+    }
+};
+
+A *a = new B();
+// Will print Goodbye
+a->work();
 ```
+
+
+---
+
+# Abstract Class in C++
+
+- C++ does not have interface like in Java
+- Instead C++ allows to define *Abstract Classes*
+- A class is abstract if it has *at least* one *pure virtual* method.
+
+```cpp
+class Vehicle{
+public:
+    virtual void drive() = 0;
+}
+```
+
+**An abstract class cannot be instanciated!**
+
 
 
 ---
@@ -554,7 +625,7 @@ class Player
 - Polymorphism is the ability of our objects to act as different types.
 - There are actually three types of polymorphism in computer science. C++ supports all three.
  - **Ad-hoc polymorphism**:   overriding functions with different parameters (we will look at this in the overloading section).
- - **Parametric polymorphism**:   overriding types based on a parameter (e.g. `vector<int>`). We will briefly look at templates at the end of lecture.
+ - **Parametric polymorphism**:   overriding types based on a parameter (e.g. `vector<int>`).
  - **Subtyping**: A subclass has compatible interface with its parent class: every method of parent class A can also be called on its derived class B.
 
 ---
@@ -563,7 +634,7 @@ class Player
 
 
 - Polymorphism in C++ occurs whenever we derive classes.
-- An object can be converted into any of its base types automatically.
+- An object can be converted into any of its base types.
 - There are a few caveats which we will look at later. But hopefully you are all familiar with this basic concept.
 ```cpp
     class Animal{
@@ -593,18 +664,12 @@ Converting (Casting) Between Types in C++
     // C-style casting.  DON'T DO THIS!
     bird *b = (bird*)s; 
 
-    // Proper C++ casting -- USE THIS
+    // Proper C++ casting -- USE THIS -- checked at compilation
     bird *b = static_cast<bird*>(s); 
 
-    // Cast outside the inheritance hierarchy. DANGER ZONE.
-    dog *d = reinterpret_cast<dog*>(s);
-
-    // Dynamic cast will return nullptr if not possible. 
+    // Dynamic cast will not be checked at compilation. 
+    // Evaluated at runtime. return nullptr if not possible. 
     dog *d = dynamic_cast<dog*>(s);
-
-    // We can also remove const, but best not to
-    const animal *a1;
-    animal *a2 = const_cast<animal*>(a1);
 ```
 
 ---
@@ -633,146 +698,103 @@ public:
 
 ---
 
-# `virtual` Members
-
-- To mark a method as overridable in a child class we need to state that it is `virtual`.
-    - Same as C\#; Java uses `abstract`.
-- When a method is `virtual` it means that it can be redefined in child classes
-- Child classes can write their own implementation of the function, specifying it using `override`
-    - it's not a requirement, but DO IT
-
-
+## Pointers and references
 
 ---
 
-# `virtual` Members
+# Pointers and References
+
+- A **pointer** is a variable storing an **address** to a value
+- A **reference** is a **link** to another variable
+
+```cpp
+int main(){
+  int a = 0; //a is an integer with value 0
+  int &ref = a; //ref is a reference to a
+  //references value can be accessed directly
+  std::cout << "ref = " << ref << std::endl; 
+  ref = 1; // and be modified directly
+  std::cout << "a = " << a << std::endl; //modifying ref will also modify a
+    
+  //ptr is a pointer to the value of a. &a is the address of a
+  int *ptr = &a; 
+  std::cout << "ptr = " << ptr << std::endl;//the value of ptr is an address
+  //to access the value of ptr, it needs to be dereferenced: *ptr
+  std::cout << "value of ptr : " << *ptr << std::endl;  
+  *ptr = 2; //modifying the value of ref will modify a.
+  std::cout << "a = " << a << std::endl;
+
+  return 0;
+}
+```
+
+```
+ref = 0
+a = 1
+ptr = 0x7ffccaf80574
+value of ptr : 1
+a = 2
+```
+
+---
+
+# Pointers of objects
+
+- To access the data of a pointer to an object, the pointer needs to be dereferenced: `(*a).a_method();`.
+- As it is something needed a lot, C++ provides a shortcut: 
+
+`a->a_method();`.
 
 ```cpp
 class A
 {
 public:
-    virtual void work()
-    {
-        cout << "Hello" << endl;
-    }
+    void work() { }
 };
 
-class B : public A
-{
-public:
-	// Compiler will check the
-    // override is valid.
-    void work() override
-    {
-        cout << "Goodbye" << endl;
-    }
-};
-
-A *a = new B();
-// Will print Goodbye
+A* a = new A();
+// Calling work by dereferencing
+(*a).work();
+// Better to use arrow notation
 a->work();
+
+delete a; //RAII rule always use delete after new.
 ```
 
----
-
-## Pointers, references, and general guidelines
 
 ---
 
-# Pointers
+# Polymorphism subtyping
 
-- You need to work with a reference (e.g. `int&`) or a pointer (e.g. `int*`) value to get the polymorphic behaviour.
+- You need to work with a reference (e.g. `int&`) or a pointer (e.g. `int*`) value to get the polymorphic behaviour with objects.
 
 ```cpp
 class A {
 public:
     virtual void work() { 
-        printf("a"); 
+        std::cout << "a" << std::endl; 
     }
 };
 
 class B : public A {
 public:
     void work() override { 
-        printf("b"); 
+        std::cout << "b" << std::endl;
     }
 };
 
 B b;
 b.work(); // Prints b
-A a1 = (A)b;
-a.work(); // Prints a
+A a1 = static_cast< A >(b);
+a1.work(); // Prints a
 
-A& a2 = (A&)b;
+A& a2 = static_cast<A&>(b);
 a2.work(); // Prints b
 
-A* a3 = (A*)&b;
+A* a3 = static_cast<A*>(&b);
 a3->work(); // Prints b
-```
-
----
-
-# Pure `virtual` Members
-
-- C# and Java provide an `interface` specifier to indicate a set of methods that a child class **must** implement itself.
-- C++ has no such specifier, but it does allow pure virtual methods.
-- A pure virtual method is one that is set to `0`.
-- If a class has any pure virtual methods no instances can be created of it.
 
 
----
-
-# Pure `virtual` Members
-
-```cpp
-class A {
-public:
-    virtual void a() = 0;
-};
-
-class B : public A {};
-
-class C : public B {
-public:
-    void a() override {};
-};
-
-// These two will produce compiler errors
-A a;
-B b;
-// This one is OK
-C c;
-```
-
-
----
-
-# Differences for References than Java & C#
-
-- C++ has references (with the & modifier).
-- However, C++ references are not the same as Java references.
-- C++ references cannot be changed to point to another variable (unlike pointers).
-- C++ references cannot be set to `nullptr`
-
-
-```cpp
-// Try and pass parameters as references when possible
-void work(const int &n) {}
-
-// If needed, or if the parameter might be null, use pointers
-void work(const int *n) {}
-
-int n = 5;
-int& m = n;
-n = 6;
-// m is also 6
-m = 7;
-// n is also 7
-A a1;
-A& a2 = a1;
-a2 = A();
-// a1 is also a new A
-a2 = nullptr; // Compiler error
 ```
 
 
@@ -783,83 +805,74 @@ a2 = nullptr; // Compiler error
 - Allocating raw pointers is discouraged in modern C++ 
     - ... but their use is fine, where appropriate!
 - Smart pointers allow automatic memory management, via RAII
-	- no more memory leaks!
+	- no more needs of using `new` and `delete` operators!
 - Two types:
+
     `shared_ptr`:   reference counted.
+
     `unique_ptr`:   has only one owner.
 
 ```cpp
-// When do we call delete?
-int *n1 = new int(5);
-// Automatically counts references - like a Java reference, but faster
-shared_ptr<int> n2 = make_shared<int>(5);
-// Only one reference will exist. Faster than shared_ptr
-unique_ptr<int> n3 = make_unique<int>(5);
-// Can still treat as a standard pointer
-int n4 = *n3;
-// Now have nullptr, n2 will deconstruct itself
-n2 = nullptr;
+int main(){
+  int *n1 = new int(5); //raw pointer which will need to be deallocated at some point
+  // Automatically counts references.
+  std::shared_ptr<int> n2 = std::make_shared<int>(5);
+  // Only one reference will exist. Faster than shared_ptr
+  std::unique_ptr<int> n3 = std::make_unique<int>(5);
+  // Can still treat as a standard pointer
+  int n4 = *n3;
+  delete n1; //the memory allocated to n1 needs to be freed explicitly
+  return 0;
+} //n2 and n3 are deallocated automatically here.
 ```
 
 
 ---
 
-# Dereferencing Pointers
-
-- Pointers have to be dereferenced to access their members.
-- This means using the `*` operator before the object name.
-- As this happens so often, and is tiresome, C++ provides the arrow notation (`->`) as a simplification.
-
-
-```cpp
-class A
-{
-public:
-    void work() { }
-};
-
-shared_ptr<A> a = make_shared<A>();
-// Calling work by dereferencing
-(*a).work();
-// Better to use arrow notation
-a->work();
-```
+## Other import things
 
 
 ---
 
-# Construction, Destruction, and Assignment
 
-- C++ gives you a LOT of control over how objects are constructed/copied/assigned/destructed/moved
-- Keep your code and data simple, and avoid specialising these behaviours
-- In special cases (e.g. when you store unique_ptr objects) you have to override some of them
-- Rule of three/five/zero 
-	- require destructor/copy constructor/copy assignment (e.g. when storing raw pointers of file handles)
-	- require all five (e.g. when storing unique_ptr)
-	- only use constructors that don't need special destructors (no special resources)
+# Rule of three/five/zero
 
+- C++ class has five special operators
 ```cpp
 class A {
 public:
-    ~A() = default;                   // destructor
-    A(const A&) = default;            // Copy constructor
-    A(A&&) = default;                 // move constructor
-    A& operator=(const A&) = default; // assignment operator
-    A& operator=(A&&) = default;      // move assignment operator 
+    ~A();                   // destructor
+    A(const A&);            // Copy constructor
+    A(A&&);                 // move constructor
+    A& operator=(const A&); // copy assignment operator
+    A& operator=(A&&);      // move assignment operator 
 };
 ```
+- **Three:** require *destructor*, *copy constructor*, *copy assignment*, if any data member needs copy instruction like raw pointers.
+- **Five:** require all five, if some data cannot be copied like a unique_ptr
+- **Zero** only use constructors that don't need special destructors (no special resources)
+
+It is recommended to not define them manually if it is not necessary.
+https://en.cppreference.com/w/cpp/language/rule_of_three.html
 
 
 ---
 
-# Const-correctness
+# Optimisation using const and constexpr
 
-Define Members as `const` If Possible
+`const` and `constexpr` keywords define constant variables or modification rights to a object data.
 
-- Many method calls do not change the state of an object.
-- If this is the case, specify the method as `const`.
-- This will allow the compiler to optimise your code, which is good.
-- It will also allow the compiler to check you are writing correct code if you do this properly.
+```cpp
+const int x = 0; //x is a constant integer
+x += 1; //this line will produce an error
+int y = x; // this is allowed
+
+constexpr int z = 2;// z is a constant evaluated at compile time
+
+
+```
+
+Define class methods as `const` if they don't modify the object data.
 
 ```cpp
 class A {
@@ -877,76 +890,78 @@ public:
 };
 ```
 
-
 ---
 
-# Declare in Headers, Implement in Code
+# The keyword static 
 
-- This is an idea you might not be as familiar with if you come from a Java and C\# background.
-- In C++, declarations should be provided in a header file (.h).
-- Actual implementation (definition) should be provided in a code file (.cpp).
-- Exceptions exist around pre-compiled headers and templates.
-
+Variable declared `static` are allocated staticly for the life-time of the program.
 
 ```cpp
-// A.h
-class A {
-    void work();
-    int do_more();
-};
-```
-```cpp
-// A.cpp
-#include "A.h"
-
-void A::work() {
-    // Do some work
+void func(){
+    static int a = 0
+    a++;
 }
-int A::do_more() {
-    return 0;  // Do some more work
+func(); 
+//a = 1
+func();
+//a = 2
+```
+
+However, the accessibility of a `static` variable depends of the scope.
+```cpp
+static int a = 0; //without scope (global): only accessible within this file
+void func(){
+    static int b = 0; //accessible only within this function
 }
 ```
 
+---
+
+# The keyword static (cont.)
+
+Properly defining global variables:
+```cpp 
+//header
+struct game_parameters{
+    static int param1;
+    static constexpr int param2 = 0;
+}
+```
+
+```cpp
+//source
+int game_parameters::param1 = 2;
+```
+
+Class members (vs instance members)
+```cpp
+class A{
+public:
+    static int a;
+    int b;
+}
+A::a //a can be accessed without having intantiate an object of Type A
+A obj;
+obj.b;
+```
+
+Static members of a class are shared by all the instance of this class.
 
 ---
 
-# Other Concepts
-
-- A number of additional concepts are worth looking into.
- - **PIMPL**: private implementation or pointer-to-implementation. Useful to hide pointer requirements and allow cheap moving of objects.
- - **templates**: are very powerful in C++. Template metaprogramming is a neat thing if you can wrap your head around it.
- - **virtual destructors**: if you have a base-class, the destructor must be virtual. Otherwise clean-up may not be correct.
-
----
 
 # Summary
-
-
----
-
-# Summary
-
-- You have just learned C++ in an hour. <!-- .element: class="fragment" -->
-- This is obviously not possible, and you will need practice in these ideas. I am simply signposting ideas. <!-- .element: class="fragment" -->
-- C++ is one of the most complicated languages around (they keep adding features), so get a good working knowledge of what you need and hack it together. <!-- .element: class="fragment" -->
-- Key thing today was how to do object-orientation properly. Hopefully you can work around this with your previous Java and C\# knowledge. <!-- .element: class="fragment" -->
-- But at the end of the day it is all about practice. <!-- .element: class="fragment" -->
-
-
----
-
-# Golden Rules / top tips
 
 1. Keep stuff out of header files. Only the bare minimum!
- - *Forward declare* types in header files (Google it).
- - You don't need to include dog.h if you only ever have a dog pointer.
 
-1. Use unique_ptr or shared_ptr as required
- - Don't even call new. Or delete. Or malloc and free. Ever. Just don't.
+1. Use unique_ptr or shared_ptr as required: Don't even call new. Or delete. Or malloc and free. Ever. Just don't.
+   Instead use *make_shared* and *make_unique*.
 
 1. Use const as much as you can.
 
+1. Use static variable instead of global variable
+
 1. Put breakpoints in all your constructors/destructors/assignment operators when debugging scope issues. 
- - You might be surprised by when they are called!
+You might be surprised by when they are called!
 
-
+====> ***https://en.cppreference.com*** <====

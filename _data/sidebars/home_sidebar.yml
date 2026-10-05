@@ -72,6 +72,9 @@ entries:
     - title: Platformer
       url: /platformer.html
       output: web
+    - title: Platformer 2
+      url: /platformer2.html
+      output: web
   - title: 8 AI - Steering & Pathfinding
     output: web
     folderitems:
@@ -90,24 +93,12 @@ entries:
     - title: Decision Trees
       url: /lab9_2.html
       output: web
-  - title: 10 Deploying
+  - title: Extras
     output: web
     folderitems:
-    - title: Deploying
-      url: /lab10_1.html
+    - title: Configure and Run project with VS Code 
+      url: vscode_setup.html
       output: web
-    - title: CI
-      url: /lab10_2.html
-      output: web
-  - title: 11 Networking
-    output: web
-    folderitems:
-    - title: Networking
-      url: /lab11.html
-      output: web
-  - title: Tips And tricks
-    output: web
-    folderitems:
     - title: SSH keys
       url: /sshkeys.html
       output: web
@@ -117,11 +108,20 @@ entries:
     - title: Resources
       url: /resources.html
       output: web
-    - title: Cmake Tricks
-      url: /cmake_tips.html
-      output: web
     - title: Resolution Scaling
       url: /resolution.html
+      output: web
+    - title: Installers
+      url: /lab10_1.html
+      output: web
+    - title: Continuous Integration
+      url: /lab10_2.html
+      output: web
+    - title: Networking
+      url: /lab11.html
+      output: web
+    - title: QA and TRC slides
+      url: /qa_trc.html
       output: web
   - title: Lectures
     output: web
@@ -135,54 +135,54 @@ entries:
     - title: Lecture 3 - Formal Elements
       url: /lecture3.html
       output: web
-    - title: Lecture 4 - Systems
+    - title: Lecture 4 - Introduction to C++
       url: /lecture4.html
       output: web
-    - title: Lecture 5 - Entities
+    - title: Lecture 5 - Systems
       url: /lecture5.html
       output: web
     - title: Lecture 6 - OO in C++
       url: /lecture6.html
       output: web
-    - title: Lecture 7 - Game Design Document
+    - title: Lecture 7 - Entities
       url: /lecture7.html
       output: web
-    - title: Lecture 8 - Design Patterns
+    - title: Lecture 8 - Game Design Document
       url: /lecture8.html
       output: web
-    - title: Lecture 9 - C++ Memory
+    - title: Lecture 9 - Design Patterns
       url: /lecture9.html
       output: web
     - title: Lecture 10 - Engines and ECM
       url: /lecture10.html
       output: web
-    - title: Lecture 11 - 2D Physics
+    - title: Lecture 11 - C++ Memory
       url: /lecture11.html
       output: web
-    - title: Lecture 12 - AI
+    - title: Lecture 12 - Performance
       url: /lecture12.html
       output: web
-    - title: Lecture 13 - Steering
+    - title: Lecture 13 - 2D Physics
       url: /lecture13.html
       output: web
-    - title: Lecture 14 - Pathfinding
+    - title: Lecture 14 - AI
       url: /lecture14.html
       output: web
-    - title: Lecture 15 - State Machines
+    - title: Lecture 15 - Steering
       url: /lecture15.html
       output: web
-    - title: Lecture 16 - Behavior Trees
+    - title: Lecture 16 - Pathfinding
       url: /lecture16.html
       output: web
-    - title: Lecture 17 - Releasing your game
+    - title: Lecture 17 - State Machines
       url: /lecture17.html
       output: web
-    - title: Lecture 18 - QA & TRC
+    - title: Lecture 18 -  Behavior Trees
       url: /lecture18.html
       output: web
-    - title: Lecture 19 - Performance
+    - title: Lecture 19 - Networking
       url: /lecture19.html
       output: web
-    - title: Lecture 20 - Networking
+    - title: Lecture 20 - Releasing your game
       url: /lecture20.html
       output: web

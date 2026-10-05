@@ -14,7 +14,7 @@ presentationTheme: '/assets/revealJS/css/theme/napier.css'
 ### SET09121 - Games Engineering
 
 <br><br>
-Babis Koniaris
+Leni Le Goff
 <br>
 
 
@@ -36,7 +36,6 @@ Game Design Workshop. 4th Edition. Tracy Fullerton (2019).
 
 # What are the Formal Elements of Games?
 
-- Structure of the game. Without them, the game is not a game anymore.
 - Fullerton defines eight elements:
     -  Players
     -  Objectives
@@ -53,28 +52,19 @@ Game Design Workshop. 4th Edition. Tracy Fullerton (2019).
 
 # Players
 
+![image](assets/images/players_image.jpg)
+
 ---
 
 # Players: who plays and why?
 
 - Games are designed for the players.
     - You must consider your game genre and target audience.
-- A game should start with an invitation to play. You want to entice the player.
-    - Cinemas dim their lights. <!-- .element: class="fragment" -->
-    - A book uses a cover. <!-- .element: class="fragment" -->
-    - A game has a title screen or introduction video. <!-- .element: class="fragment" -->
+- A game should start with **an invitation to play**. You want to entice the player.
+
+![image](assets/images/mario_title_screen.jpg) <!-- .element height="50%" width="50%" -->
 
 
----
-
-# Multiplayer games
-
-- The invitation to play can become quite complicated in multiplayer games.
-- Can you name unique challenges when inviting players to a multiplayer online game?
-    - You need to check how many players want to join and how many are needed. <!-- .element: class="fragment" -->
-    - Are all of them ready? <!-- .element: class="fragment" -->
-    - Which role is assigned to which player? <!-- .element: class="fragment" -->
-    - Are there any teams? <!-- .element: class="fragment" -->
 
 ---
 
@@ -82,85 +72,14 @@ Game Design Workshop. 4th Edition. Tracy Fullerton (2019).
 
 - A **Player Interaction Pattern** helps us define how players play the games.
 - There are seven key types:
-    - Single-player versus the game.
-    - Multiple individual players versus the game.
-    - Player versus player.
-    - Unilateral competition.
+    - Single-player versus the game. (PvE)
+    - Multiple individual players versus the game. (Multi PvE)
+    - Player versus player. (PvP)
+    - Unilateral competition. 
     - Multilateral competition.
     - Cooperative play.
     - Team competition.
 
----
-
-# Single-player versus the game
-
-- A single player competes against the game system.
-
-![SinglePlayerVersusGame](assets/images/SinglePlayerVersusGame.png)
-
-(Image source: T.Fullerton. Game Design Workshop. 4th Edition, 2019.)
-
----
-
-# Multiple individual players versus the game
-
-- Multiple players competes against the game system.
-- They do not compete against each other and the action is not directed at other players.
-
-![MultipleIndividualsVsGame](assets/images/MultipleIndividualsVsGame.png)
-
-(Image source: T.Fullerton. Game Design Workshop. 4th Edition, 2019.)
-
----
-
-# Player versus player
-
-- Two players directly compete.
-- Within games, the term "Player versus Player" might be used differently.
-
-![PlayerVsPlayer](assets/images/PlayerVsPlayer.png) 
-
-(Image source: T.Fullerton. Game Design Workshop. 4th Edition, 2019.)
-
----
-
-# Unilateral competition
-
-- Two or more players compete against one single player.
-
-![UnilateralCompetition](assets/images/UnilateralCompetition.png)
-
-(Image source: T.Fullerton. Game Design Workshop. 4th Edition, 2019.)
-
----
-
-# Multilateral competition
-
-- Three or more players compete against each other.
-
-![MultilateralCompetition](assets/images/MultilateralCompetition.png)
-
-(Image source: T.Fullerton. Game Design Workshop. 4th Edition, 2019.)
-
----
-
-# Cooperative play.
-
-- Two or more players cooperate against the game system.
-
-![CooperativePlay](assets/images/CooperativePlay.png)
-
-(Image source: T.Fullerton. Game Design Workshop. 4th Edition, 2019.)
-
----
-
-# Team competition.
-
-- Two or more groups compete against each other.
-
-![TeamCompetition](assets/images/TeamCompetition.png)
-
-(Image source: T.Fullerton. Game Design Workshop. 4th Edition, 2019.)
 
 ---
 
@@ -200,57 +119,64 @@ Game Design Workshop. 4th Edition. Tracy Fullerton (2019).
 
 # Player Roles
 
-- You need to define what the player's task is in the game. <!-- .element: class="fragment" -->
-- Some games offer different roles for the player to choose from. <!-- .element: class="fragment" -->
-    - A Game Master in Dungeons and Dragons has a different role than the other players. <!-- .element: class="fragment" -->
-    - One team member might be the party leader. <!-- .element: class="fragment" -->
-- Different roles might have different rules associated with them. <!-- .element: class="fragment" -->
+- You need to define what the **player's task** is in the game. 
+- Some games **offer different roles** for the player to choose from. 
+    - Heterogenous Multiplayer Team: World of Warcraft, League of Legend, Team Fortress ...
+    - Asymmetric Multiplayer gameplay: Splinter Cell: Chaos Theory, Left 4 Dead 2, Dead by Daylight ... 
+    - Single player RPG have different classes: Diablo serie, Dragon Age ... 
+- **Different roles** have **different rules** associated with them.
 
 ---
 
 # Objectives
 
+![images](assets/images/halo.jpeg)
+
 ---
 
 # Objectives: providing drive and challenge to the player
 
-- Players are the heart of the game experience, objectives drive the experience. <!-- .element: class="fragment" -->
-- Objectives provide a challenge to the player that should be achievable. <!-- .element: class="fragment" -->
-- Objectives also set the overall feel of the game: <!-- .element: class="fragment" -->
-    - FPS: killing and survival. <!-- .element: class="fragment" -->
-    - The Sims: Manage the lives of simulated people. <!-- .element: class="fragment" -->
-- Objectives may also be made up of sub-objectives. <!-- .element: class="fragment" -->
-    - Side quests are similar, but normally distinct. <!-- .element: class="fragment" -->
+- Players are the heart of the game experience, objectives drive the experience.  
+- Objectives provide a **challenge** to the player that should be achievable. 
+- Objectives also set the **overall feel** of the game:  
+    - FPS: killing and survival. 
+    - The Sims: Manage the lives of simulated people. 
+- Objectives may also be made up of **sub-objectives**.  
+    - Side quests are similar, but normally distinct.  
 
 ---
 
 # Common Objective Types
 
 - Capture  <!-- .element: class="fragment" -->
-    - Take or destroy something from the opponent.  <!-- .element: class="fragment" -->
+    - Take or destroy something from the opponent. 
 - Chase  <!-- .element: class="fragment" -->
-    - Catch an opponent or elude one.  <!-- .element: class="fragment" -->
+    - Catch an opponent or elude one. 
 - Race <!-- .element: class="fragment" -->
-    - Reach the goal before all other players. <!-- .element: class="fragment" -->
+    - Reach the goal before all other players, or a given time 
 - Alignment <!-- .element: class="fragment" -->
-    - Arrange pieces in certain configurations or categories. <!-- .element: class="fragment" -->
+    - Arrange pieces in certain configurations or categories.
 - Rescue / escape <!-- .element: class="fragment" -->
-    - Get a designated unit to safety. <!-- .element: class="fragment" -->
+    - Get a designated unit to safety. 
 - Forbidden act <!-- .element: class="fragment" -->
-    - Try to make other players perform a forbidden action (laughing, say a word, etc.). <!-- .element: class="fragment" -->
+    - Try to make other players perform a forbidden action (laughing, say a word, etc.).
 
 ---
 
 # Common Objective Types (cont.)
 
 - Construction <!-- .element: class="fragment" -->
-    - Build, maintain, and manage objects. <!-- .element: class="fragment" -->
+    - Build, maintain, and manage objects.
 - Exploration <!-- .element: class="fragment" -->
-    - Explore different game areas. <!-- .element: class="fragment" -->
+    - Explore different game areas. 
 - Solution <!-- .element: class="fragment" -->
-    - Solve a problem or puzzle. <!-- .element: class="fragment" -->
+    - Solve a problem or puzzle. 
 - Outwit <!-- .element: class="fragment" -->
-    - Gain and use knowledge to defeat the other players. <!-- .element: class="fragment" -->
+    - Gain and use knowledge to defeat the other players. 
+- Survival <!-- .element: class="fragment" -->
+    - Don't die!
+- Accumulation <!-- .element: class="fragment" -->
+    - Get as much resources as possible, typically points
 
 ---
 
@@ -258,11 +184,12 @@ Game Design Workshop. 4th Edition. Tracy Fullerton (2019).
 
 - What is the objective in Super Mario Bros?
 
-![SuperMarioBros](assets/images/mario.jpg) <!-- .element height="60%" width="45%" -->
+![SuperMarioBros](assets/images/mario.jpg) <!-- .element height="50%" width="45%" -->
 
-- Saving the princess?
-- Reaching the end of the level?
-- Jumping on enemies?
+- Saving the princess? <!-- .element: class="fragment" -->
+- Race: Reaching the end of the level before the end of the timer and as fast as possible <!-- .element: class="fragment" -->
+- Survival: Avoiding or jumping on enemies, avoiding gaps. <!-- .element: class="fragment" -->
+- Accumulation: Get the best score. <!-- .element: class="fragment" -->
 
 ---
 
@@ -287,7 +214,7 @@ Game Design Workshop. 4th Edition. Tracy Fullerton (2019).
 - Mario's jump is one of the best examples of a 'simple' procedure <!-- .element: class="fragment" -->
 - But it gives a huge amount of freedom and flexibility <!-- .element: class="fragment" -->
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/7daTGyVZ60I" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> <!-- .element: class="fragment" -->
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Fh5rA957xB0?si=7htsYhl-SiCPxoPF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe><!-- .element: class="fragment" -->
 
 ---
 
@@ -323,30 +250,29 @@ Game Design Workshop. 4th Edition. Tracy Fullerton (2019).
 
 ---
 
-# Example: Rules Defining a shotgun
+# Example: Advance Wars
 
-- Consider a shotgun in a FPS:
-    - Cost: $500, Damage: 20 <!-- .element: class="fragment" -->
-    - Spread: 10, Range: 5 <!-- .element: class="fragment" -->
-    - Ammo: 2, Magazine: 12 <!-- .element: class="fragment" -->
-- We can also use rules to restrict certain actions for progression purposes. <!-- .element: class="fragment" -->
-    - Special items in Legend of Zelda series
-- Providing all capabilities at once can confuse and frustrate the player. <!-- .element: class="fragment" -->
-    - Same applies with tutorials, and any form of learning
+![image](assets/images/advance_war.png)<!-- .element height="120%" width="120%" -->
 
 ---
 
-# Rules Determining Effects
+# Rules for building gameplay and progression
 
-- Rules that trigger events or effects are very useful when considering the procedures of our game.
-- We can boil down such rules to a collection of `if` statements:
-    - `if player’s health == 0 then player dies.`
-    - `if player picks up apple then health += 10.`
-    - etc.
+- We can also use rules to restrict certain actions for progression purposes.
+    - Special items in Legend of Zelda series
+- Providing all capabilities at once can confuse and frustrate the player. 
+    - Same applies with tutorials, and any form of learning 
+- Rules that trigger events or effects are very useful when considering the procedures of our game. 
+    - We can boil down such rules to a collection of `if` statements:
+        - `if player’s health == 0 then player dies.` 
+        - `if player picks up apple then health += 10.` 
+        - etc.
 
 ---
 
 # Resources
+
+![image](assets/images/sc2.jpeg)
 
 ---
 
@@ -374,7 +300,7 @@ Try to name some examples of resources.
 - Units <!-- .element: class="fragment" -->
 - Health <!-- .element: class="fragment" -->
 - Currency <!-- .element: class="fragment" -->
-- Inventory <!-- .element: class="fragment" -->
+- Items <!-- .element: class="fragment" -->
 - Special terrain <!-- .element: class="fragment" -->
 - Actions <!-- .element: class="fragment" -->
 - Power-ups <!-- .element: class="fragment" -->
@@ -383,6 +309,8 @@ Try to name some examples of resources.
 ---
 
 # Conflict
+
+![image](assets/images/CommandConquer.jpg)<!-- .element height="80%" width="80%" -->
 
 ---
 
@@ -449,6 +377,85 @@ Try to name some examples of resources.
 
 ---
 
+## Analysis of 2D games genre
+
+---
+
+# Shoot 'em up
+
+![Shoot 'em up](assets/images/shootemup.png)
+
+---
+
+# Shoot 'em up
+
+-  **Players**: <span class="fragment">Single player against the game </span>
+-  **Objectives**:<span class="fragment">Survival, Race, Accumulation</span>
+-  **Procedures**:<span class="fragment">Move left, right, up and down, Shoot</span>
+-  **Rules**:<span class="fragment"> Side scrolling, stats of the enemies and of the players weapon, projectile with geometrical pattern </span>
+-  **Resources**:<span class="fragment">Life, Weapon, Coin etc...</span> 
+-  **Conflict**:<span class="fragment"> Pattern of projectile vs movement </span>
+-  **Boundaries**:<span class="fragment">Limit of the screen</span>
+-  **Outcome**:<span class="fragment">Finishing a level, access to the next level</span>. 
+
+---
+
+# Tower defence
+
+![TowerDefence](assets/images/tower_defence.webp)
+
+
+---
+
+# Tower defence
+
+-  **Players**: <span class="fragment">Single player against the game  </span> 
+-  **Objectives**: <span class="fragment">Survival, Accumulation, Construction </span>
+-  **Procedures**:<span class="fragment"> Build, upgrade, and buy new towers </span>
+-  **Rules**: <span class="fragment">Stats of towers, towers placement, enemies path finding
+-  **Resources**: <span class="fragment">Money </span>
+-  **Conflict**: <span class="fragment">Limited resources vs optimal defense, limited placement </span>
+-  **Boundaries**: <span class="fragment">Small map </span>
+-  **Outcome**: <span class="fragment">Finishing a level, access to the next level. </span>
+
+---
+
+# Metroidvania
+
+<div style="display: flex; gap: 20px; align-items: center; justify-content: center;">
+  <img src="assets/images/Hallownest_marked_map.png" style="height: 300px;" />
+  <img src="assets/images/hollow_knight.jpg" style="height: 300px;" />
+</div>
+
+---
+
+# Metroidvania
+
+-  **Players**: <span class="fragment">Single player against the game  </span> 
+-  **Objectives**: <span class="fragment">Survival, Accumulation, Solution </span>
+-  **Procedures**:<span class="fragment"> Move left and right, Jump, Attack, Items special ability </span>
+-  **Rules**: <span class="fragment"> Gravity, height of jump, speed of displacement </span>
+-  **Resources**: <span class="fragment"> Life, skills items, coin </span>
+-  **Conflict**: <span class="fragment"> Accessing certain area necessite special ability, Gravity vs Jump </span>
+-  **Boundaries**: <span class="fragment"> Entire Map </span>
+-  **Outcome**: <span class="fragment">Finishing a the game. </span>
+
+---
+
+# Other important 2D game genre
+
+- Platformers: Super Mario, Super Meat Boy, Rayman
+- Real time strategy (RTS): Starcraft, Age of Empire
+- Japanese role playing game (JRPG): Final Fantasy, Fire Emblem
+- Hack'n'slash or action RPG: Diablo, Path of Exile
+- Virtual Fighters: Street Fighter, Tekken
+- Beat 'em up: Streets of Rage, Shank
+- Puzzle Game: Tetris
+- Point and click: Grim Fandango, Sam and Max, Monkey Island
+
+
+---
+
 # Summary
 
 
@@ -456,7 +463,7 @@ Try to name some examples of resources.
 
 # Try Describing a Game Using the Formal Elements
 
-- After the class, try and describe a game (board, video, or social) using the vocabulary of formal elements.
+- After the class, try and describe a game using the vocabulary of formal elements.
 - Try to go into some real depth: it will help you understand games more.
 - Think about the formal elements whenever you play a game. Try and pick apart the individual elements of the game to get a better understanding of how it is put together.
 

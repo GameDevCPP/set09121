@@ -7,50 +7,19 @@ summary: OO
 sidebar: home_sidebar
 ---
 
-
 <video class="middle" width="400" height="300" loop autoplay>
   <source src="assets/videos/space_invaders.mp4" type="video/mp4">
 </video>
 
 This lab is design to introduce you to: Object Orientation(OO) in C++, Working with C++ header files, and a small amount of memory and resource management.
 
-# Adding another project
+# Create a new project
 
+- Copy and paste the files from the previous lab.
+- Rename the project ``` project(space_invaders) ```
+- Change the name of the executable ``` add_executable(space_invaders main.cpp) ```
+- Don't forget to change the name of executable everywere it is mentionned.
 
-In this lab, we will be adding a 'project' to our already existing 'Games Engineering solution'. 
-
-Note: this is the terminology of Visual Studio. In CMake terms we are adding another 'Executable' to the 'project'. Yeah, tech is fun!
-
-To do this, follow these steps:
-
--   Create a new folder inside your **repo**.
-
--   Within that, create a main.cpp, feel free to copy some boilerplate
-    SFML code into it. (This is why I suggested you keep the green circle example somewhere)
-    
--   Add the following to the bottom of your CMakeLists.txt file (Make sure that you use the right folder names in here!)
-```cmake
-## Space invaders
-file(GLOB_RECURSE SOURCES 2_invaders/*.cpp 2_invaders/*.h)
-add_executable(2_INVADERS ${SOURCES} )
-target_include_directories(2_INVADERS SYSTEM PRIVATE ${SFML_INCS})
-target_link_libraries(2_INVADERS sfml-graphics)
-```
-
--   Configure and generate from CMake.
-
-## Helpful hint: on Re-configuring CMake
-
-Whenever we alter the CMake script, or add / remove source files from the source repo, we must configure and generate from CMake again. There is a short-cut do doing this. In your open solution in visual studio, CMake builds a helper project called \"ZERO\_CHECK\". Building this project runs a script to configure and regenerate in the background. So we can edit and rebuild the CMakelists.txt without leaving Visual studio.
-
-## A note on creating additional files
-
-As you know, we have all our source code in the source 'repo' folder, and all the project and build files in the ephemeral 'build' directory that CMake generates for us. CMake links the source files directly in the project files. When you edit a .cpp file in Visual Studio, it is editing the real file in the repo directory, even though all of visual studios files are in the 'build' directory.
-
-One annoying caveat of this is that if you try to create a new file from visual studio, it incorrectly puts it in the build directory. You can manually type in the correct directory in the create file dialogue, or create the files manually and re-run CMake. Note: you will have to re-run CMake anyway when adding or removing files in the source directory.
-
-{:class="important"}
-**Don't continue until you have gotten a second project working in Visual Studio and showing a green circle - remember you will have to change the startup project!** 
 
 ## Runtime Resources
 
@@ -59,9 +28,6 @@ Take a look here  [Runtime Resources tips and tricks](resources)
 
 **Don't skip this section, it's important**
 
-## Lib, linking, and cmake.
-
-If you are getting into a mess with you CMake, have a look here [CMake tips](cmake_tips)
 
 # Sprite-sheets
 
@@ -107,24 +73,29 @@ The primary benefit of sprite sheets however is sprite-animation. It is commonpl
 Working with Sprite-sheets in SFML couldn't be easier. Take a look at this:
 
 ```cpp
-//Main.cpp
+//main.cpp
 sf::Texture spritesheet;
 sf::Sprite invader;
 
-void Load() {
+void init() {
   if (!spritesheet.loadFromFile("res/img/invaders_sheet.png")) {
-    cerr << "Failed to load spritesheet!" << std::endl;
+    std::cerr << "Failed to load spritesheet!" << std::endl;
   }
   invader.setTexture(spritesheet);
   invader.setTextureRect(IntRect(Vector2i(0, 0), Vector2i(32, 32)));
 }
 
-void Render() {
+void render() {
   window.draw(invader);
 }
 ```
 
-At this stage, you might find your code doesn't run because of the *cerr* call. That's normal, and it is to do with the fact that the cerr is not part of core C++, it's a helper object from the standard (std) library. To explain it fully would be out of the scope of this lab, so you can think of it as being the equivalent of the *System.out.println* or *Debug.Log* functions you might be more used to - it allows us to print to the console. As such, it is IO functionality, and so we need to include the correct library for this to work. **I'll leave you to find out which one you need!**
+At this stage, you might find your code doesn't run because of the *cerr* call. That's normal, and it is to do with the fact that the cerr is not part of core C++, it's a helper object from the standard (std) library. To explain it fully would be out of the scope of this lab, so you can think of it as being the equivalent of the *System.out.println* or *Debug.Log* functions you might be more used to - it allows us to print to the console. As such, it is IO functionality, and so we need to include the correct library for this to work: ``` #include <iostream>```
+
+```cpp
+std::cout << "print on the standard output of the console" <<  std::endl; //end of line
+std::cerr << "print on the error output of the console" << std::endl; 
+```
 
 Take note of this line:
 
@@ -132,12 +103,9 @@ Take note of this line:
 sprite.setTextureRect(IntRect(Vector2i(0, 0), Vector2i(32, 32)));
 ```
 
-The rectangle structure takes the form of (Left, Top, Width, Height). Our sprite-sheet is dived into squares of 32x32 pixels. So this line of code set the 'cut' do be the top left square in the image, aka. The first invader sprite. **Remember, you should be looking up the SFML API to find out things like this yourself going forwards**
+The rectangle structure takes the form of (Left, Top, Width, Height). Our sprite-sheet is devided into squares of 32x32 pixels. So this line of code set the 'cut' do be the top left square in the image, aka. The first invader sprite. **Remember, you should be looking up the SFML API to find out things like this yourself going forwards**
 
 Note that the invader doesn't take up the whole 32x32 square, it's surrounded by transparent pixels. SFML takes care of doing the rendering with correct modes so as to cuts out the background, but we may have to be careful when it comes to physics and collision code.
-
-
-
 
 # Checkpoint
 

@@ -7,11 +7,10 @@ summary: lecture19
 layout: presentation
 presentationTheme: '/assets/revealJS/css/theme/napier.css' 
 ---
-
 <section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
 <textarea data-template>
 
-# Lecture 19 - Performance Optimisation
+# Lecture 19 - Networking
 ### SET09121 - Games Engineering
 
 <br><br>
@@ -24,454 +23,385 @@ School of Computing. Edinburgh Napier University
 
 ---
 
-# What is Performance Optimisation?
+# Our Goal
 
-- Optimisation is about making the best use of a resource.
-- Optimisation in software is about making best use of our computer hardware resource(s).
-- There are different areas we can optimise for in software, but we will focus on performance.
-- Performance is about getting the most work done in the shortest amount of time with our computing resource.
-- Therefore, in a game, we are worried about:
-    -  producing a frame in a reasonable time (typically 16.6ms) 
-    -  performing the most work possible in that time to give a good gameplay experience.
-- We are going to look at code level concerns mainly. Turning down update frequencies of systems is another strategy.
+- We want to enable our game to support multiple players from different machines.
+- This requires some form of communication between the different machines.
+- It also requires some form of coordination between the different instances of the game.
+- We also have to do this in real-time so that the game does not hang or become unplayable due to lag.
+- So how do we achieve this?
 
 
 ---
 
-# Premature Optimisation
+# Questions
 
- Two famous quotes by Donald Knuth:
-- "We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil. Yet we should not pass up our opportunities in that critical 3%."
-- "In established engineering disciplines a 12% improvement, easily obtained, is never considered marginal and I believe the same viewpoint should prevail in software engineering."
-
----
-
-# Premature Optimisation
-
-Basically, Knuth argues that we should not let performance considerations determine the design of our code -  it makes the code more difficult to work with.
-
-I think a good rule for the module is -  get your game working first; then worry about extra features and performance optimisation.
-
-A good approach is to design-build-measure-optimise. 
+- How does networking work?
+- How do we do network programming?
+- What are the limitations of networking?
+- How do we solve these limitations in games?
+- What data should we send in a game and how do we send it?
+- How can we do networking in SFML?
 
 
 ---
 
-# The 80/20 Rule
-
-- You might have heard of this...
-- Pareto Principle (or 80/20 rule) states that 80% of output comes from 20% of input.
-- Applied to programming, we can say that 80% of processor time will happen in 20% of our code.
-- It does make sense -  loops normally are the biggest area of computation in your application.
-
-
- ![image](assets/images/80-20.jpg) <!-- .element width="60%"  -->
+## How does networking work?
 
 ---
 
-# What are we interested in?
+# Hardware
 
-- There are two areas we can focus on to improve program performance for our games.
-- **CPU utilisation**:
- - How well are we using the processor? Is it doing work it doesn't need to?
-- **Memory usage**
- - Is memory effectively accessible to the processor? Is the processor waiting too long to do memory operations?
-- We will focus on these two areas, looking at best-practice on the CPU and memory usage.
-- There are many more techniques and tricks we can use, but normally they come down to these same two areas.
+- We can break-down network hardware into the following:
+    - Computers on the network.
+    - Network interfaces on the computers.
+    - Routers and switches that interfaces connect to.
+    - The connection between the interfaces and the switch/router.
+
+- Each one of these works at a different level of data abstraction.
 
 
+ ![image](assets/images/network-diagram.png)
 
 
 ---
 
-# First big trick
+# The Seven Layer OSI Model
 
-Release mode and run without debug
+- Networking works on a layered model.
+    - Application data at the top layer.
+    - Electrical signals at the bottom layer.
+- As programmers, we rarely need to consider below level 3.
 
-- A debug build is far slower than a release build
-- Running with "Debugging" mode on in a build is far costlier than without debugging
-- To identify the true performance: build with Release, execute without debugging
 
- ![image](assets/images/run-no-debug.JPG)
+![image](assets/images/osi_layers.jpg) <!-- .element width="60%"  -->
+
+---
+
+# Addressing and Switching
+
+- Networking works like a mail system.
+- We send data via packets (video file: lots of packets, text file: few packets)
+- Each individual packet has an address (IP address) which routers and switches have to look at.
+- Routers forward packets to different computer networks
+- Switches forward packets to the correct device in a network
+- Packets can be lost
+
+---
+
+# Transport Control Protocol - TCP
+
+- TCP provides means of breaking down data into separate packets.
+- Each data chunk is given a sequence number to allow the data to be reformed.
+- TCP guarantees acknowledgement of sent data - this means we know that data has arrived if we don't get an error.
+- TCP is the most common distributed application protocol because of its guarantees.
+- However, it also introduces higher latency. When this is an issue, we use UDP.
+
+---
+
+## How do we do network programming?
 
 
 ---
 
-# Second big trick 
+# Client-server Model
 
-Avoid I/O or do it better
+- The most common application model in networking is the client-server.
+- A client connects to a server machine via some form of universal addressing.
+- The server can now communicate directly with that client.
+- A server may have multiple clients that it is communicating with.
 
-- During debugging, we often output values to the console to check behaviour.
-- I/O like this is very slow, requiring your program to interact with the OS and present data.
-- You should avoid this I/O as far as possible in final builds.
-- When using `cout`, avoid the end-of-line terminator (`endl`), as this also flushes a stream, which is slow.
-- `cout` might be slower than `printf` by default, but that's fixable with `std::ios::sync_with_stdio(false);`
-- Easy debug-only code execution: `#ifdef _DEBUG`
 
----
+ ![image](assets/images/client-server.png) <!-- .element width="60%"  -->
 
-# Metrics
-
-- Let's define metrics that allow us to talk about performance .
-- FPS: Frames-Per-Second. 
-    - The key measure most gamers like to talk about. The typical FPS displayed is the **average** of the number of frames processed per second. 
-- Frame Time:  
-    - This is actually what we are interested in. How long does it take the game to produce and render a **single** frame? Typically we aim for 16.7ms (60FPS) or 33.3ms (30FPS).
-- Speedup
-    -  When we make an improvement we need to understand what that improvement is. Speedup is the calculation of the original time against the new time. It is calculated as $S=\frac{original}{new}$.
 
 
 ---
 
-## Step 1 - Only process what you need
+# Sockets
+
+- Applications communicate using sockets.
+- A socket is just an encapsulation of the following:
+    - Address: typically an IP address.
+    - Protocol: for example TCP.
+    - Port: allows an individual application to be addressed on the network.
+- These are provided by layers 3-5 of the OSI model.
+- A socket is therefore a software abstraction that allows an application to send and receive data with other applications.
+- Each socket thus has both a source port and a destination port.
 
 
 ---
 
-# Alive Flag
+# Server Socket
 
-- The first tactic we can use to improve processing is to flag if processing something can be skipped.
-- An alive flag is a typical technique to indicate that an object should not be processed.
+- A server socket is a special type of socket that listens for an initial communication.
+- A client socket will connect to this socket initially.
+- Once connected, the server creates a new socket exclusively for that client connection (with an appropriate port).
+- The server socket can continue listening on its original socket for new incoming connections.
+- A server socket will be the first established socket in a distributed application. It is needed to initiate a connection.
+
+
+
+---
+
+# Three-way Handshake
+
+- As TCP requires guaranteed connection, the client-server communication initiates what is known as a three-way handshake.
+- The client sends a SYN packet to the server.
+- The server sends a SYN+ACK packet to acknowledge.
+- The client sends a ACK packet to acknowledge.
+- Communication is now established.
+
+
+ ![image](assets/images/three-way.png)
+
+
+---
+
+## What are the limitations of networking?
+
+
+
+---
+
+# Bandwidth and Throughput
+
+- The biggest limitation on a network is its bandwidth.
+- The bandwidth indicates the theoretical limit that data can be sent through the network.
+    - Typically measured in megabits (1 million bits) per second.
+- Most people have heard the term bandwidth, but the actual figure we are interested in is throughput.
+- Throughput is the **actual** amount of data that is sent between two machines.
+- Throughput will be lower than bandwidth due to limitations between the two machines and other factors.
+- Generally, throughput is too low for transferring an entire game's data in 16ms.
+    - On a 100Mbps network that is enough time to send 2 kilobytes of data.
+
+
+---
+
+# Latency
+
+- Latency (or lag) is a bigger concern in games.
+- Latency is the time it takes a packet to get to another machine.
+- You can find latency easily using ping and dividing the result by two (as ping does a round trip).
+- For example, as of writing I can ping Google from my office machine in about 23ms, so latency is about 12ms.
+- Latency is therefore going to mean any update you send between game instances will likely be at least one frame out-of-date.
+
+
+---
+
+# TCP Guarantees
+
+- TCP can be a very slow protocol.
+- Each TCP packet must be acknowledged by the receiver.
+- The receiver has to rebuild the sent data from the packets.
+- If any packet is missing, the entire data is resent.
+- If an acknowledgement is not received, the sender resends the data.
+- So TCP guarantees come at a cost.
+
+
+---
+
+## How do we solve these limitations in games?
+
+
+---
+
+# Peer-to-peer Lockstep
+
+- The original approach to solving networking for games was a peer-to-peer lockstep.
+- Here, each client would update its move to the other clients.
+- The game would wait until everyone has updated before moving onto the next move.
+- It was slow as you can guess.
+
+
+ ![image](assets/images/p2p.png)
+
+
+
+---
+
+# Client-side Prediction
+
+- Nowadays games use prediction algorithms to counter latency
+- Client handles input locally, and sends it to server
+- After server game state update, clients gets update too
+- If new state different from predicted state: smooth/interpolate
+
+
+ ![image](assets/images/client-prediction.png)
+
+
+
+---
+
+# User Datagram Packet - UDP
+
+- As we are now predicting movements and locations, we can occasionally lose information without much concern.
+- Therefore, we do not need packet guarantees. TCP is no longer needed.
+- UDP is an alternate protocol which is connectionless. We just send data to a location.
+- The receiver will keep looking for new data packets as often as it can.
+- Basically, we can improve performance considerably by not acknowledging data sends.
+
+
+---
+
+# TCP vs UDP Header
+
+![image](assets/images/tcp_udp_header.jpg) <!-- .element width="60%"  -->
+
+
+---
+
+# Synchronous vs Asynchronous Polling
+
+- We can also choose how we receive data from connections.
+- Typically, we **wait** on a connection until data arrives. Really bad if done in main thread.
+- Asynchronous socket communication means we don't wait: we just read otherwise we move on.
+- This allows the game to continue on and we can check again later.
+
+---
+
+# Physics
+
+- A big problem in games actually comes from the physics system.
+- The physics system is keeping track of all the physical objects and their interactions.
+- A physics engine will typically add some randomness to reactions just to smooth out some of the operations.
+- We cannot have this in different clients as it would lead to different game instances having different object locations.
+- Solving game physics problems is a whole other area that we won't cover - just send the complete physical data every so often to get around this.
+
+
+---
+
+## What data should we send in a game and how do we send it?
+
+
+
+
+---
+
+# Initial State
+
+- Scenes/levels are typically the same for all clients, only starting parameters differ
+- We only need to share what is different:
+	- Player start position: ok
+	- Positions of initial scene elements: **unnecessary**
+
+---
+
+# Scene Updates
+
+- At every network "tick" you need to communicate data between the client and server.
+- The communication must update the server with information the client has on scene updates.
+- The communication must update the client with information the server has on scene updates.
+- Every so often, the client and server must do a more complete update to normalise their information.
+- Effectively, we are trying to keep the client and server as synchronised as possible without performing lockstep.
+
+
+---
+
+# Object Serialisation
+
+- The process of converting a data object into a series of bytes
+- Deserialise: opposite process
+- Can be text (e.g. JSON, XML) or binary
+- Several managed languages have good built-in serialisation because of their support for reflection.
+- Reflection is the capability to inspect type information at runtime
+- C++ has poor reflection support, and poor built-in serialisation capabilities
+
+
+---
+
+# Designing a Protocol
+
+- Define a fixed size for the messages.
+- Define a messages formats: 
+    - Design your message types and the data that will go into the message
+- Limit serialisation size
+- This will allow simple messaging that can be easily managed
+- Here is a one-size-fits-all message:
+
+ ![image](assets/images/protocol.png)
+
+
+---
+
+## How can we do networking in SFML?
+
+---
+
+# SFML Networking
+- Networking in SFML is relatively easy.
+- We will use the following classes:
+ - **TcpListener** - a listening or server socket.
+ - **TcpSocket** - a socket to communicate via.
+ - **UdpSocket** - a UDP socket to communicate via.
+- We will use the following methods:
+ - **listen** - listen for a new connection.
+ - **accept** - accept a new connection.
+ - **connect** - connect to a server.
+ - **send** - send data via a socket.
+ - **receive** - receive data from a socket.
+
+
+
+---
+
+# SFML Networking Server
 
 ```cpp
-if (alive) {
-    DoSuperExpensiveOperation();
-}
-...
-if (health == 0) {
-    alive = false;
-}
-```
+#include <iostream>
+#include <SFML/Network.hpp>
 
+using namespace std;
+using namespace sf;
 
----
-
-# Object Pool
-
-- Object creation and destruction is very expensive.
-- It involves memory allocation, function calls, grabbing bits and pieces, maybe loading content.
-- It can also lead to objects being scattered around memory -  expensive to jump around.
-- An object pool fixes that (especially when combined with alive flags):
-    - Allocate max number of objects required.
-    - When a new object is needed grab from allocated pool and set necessary values.
-    - When finished, flag as not-alive and give back to pool.
-
-
----
-
-# Dirty Flag
-
-- Some game data is processed each frame to allow our game to have a dynamic nature.
-- However, a lot of data only changes in some circumstances.
-    - For example, the player only moves when the user controls them.
-- Rather than reprocess certain data every frame, we can use the dirty flag to say that data should be reprocessed that frame.
-
-```cpp
-if (player moved) {
-    Change position in primary data
-    Set dirty flag on primary data
-}
-...
-if (dirty flag is true) {
-    Process secondary data (expensive)
-    Set dirty flag to false
-}
-```
-
----
-
-## Step 2 - Only draw what is visible
-
-
----
-
-# Visible Flag
-
-- Rendering to the screen is one of the most expensive processes in games.
-    - It's why we have dedicated graphics hardware.
-- We can use our flag technique to determine if an object is visible and therefore should be rendered.
-- This allows us to hide objects/turn off their rendering when we want.
-- It also allows us to add objects that should not be rendered.
-    - Remember - what you see when playing a game isn't all that is there.
-
-```cpp
-    if (visible)
-    {
-        Render object (expensive)
+int main(int argc, char **argv) {
+    TcpListener listener;
+    if (listener.listen(5000) != Socket::Done) {
+        cout << "Server could not open socket" << endl;
+        return -1;
     }
-```
-
-
----
-
-# Spatial Partitioning
-
-- Another question is whether an object is even on screen.
-- Spatial partitioning allows us to divide the world up so we only render the parts that are visible.
-- Also used for collision detection optimisation.
-
-![image](assets/images/spatial-partition.png) <!-- .element width="80%"  -->
-
-
----
-
-# Example - Horizon Zero Dawn
-
-<video class="middle" width="960" height="540" loop autoplay>
-  <source src="assets/videos/horizon.mp4" type="video/mp4">
-</video>
-
-
----
-
-## Step 3 - Think about your memory
-
----
-
-# Memory
-
-Allocate Your Required Memory First
-- We have mentioned this a few times now.
-- Memory allocation (and subsequent deallocation) is expensive on the free store.
-- Try and allocate everything you need at the start of a level or the game. Then it is there and you can access it uniformly.
-- Data should also be near similar data -  this allows quick processing of blocks during similar operations.
-
-
----
-
-# `constexpr` What You Can
-
-- `const` is a qualifier used for readability, maintenance and performance
-- `constexpr` takes this further: expression is calculated at compile time
-    - So you can produce certain functions that are compile time processed.
-- Compile time means the code is not processed during runtime.
-
-```cpp
-constexpr int N = 1000;
-
-constexpr int factorial(int n)
-{
-    return n <= 1 ? 1 : (n * factorial(n - 1));
-}
-
-//compiler does this!
-constexpr int Nfav = factorial(N); 
-
-```
-
----
-
-# Memory Alignment and Cache Coherence
-- We talked about this during our memory and resource management lectures.
-- Memory alignment means that data is aligned in memory to minimize the reads to access the data that we need.
-- For cache coherency we discussed the difference in processing a multi-dimensional array using different indices, due to memory layout. For example, the first `for` loop below is faster than the second.
-
-```cpp
-for (int i=0; i < 32; i++)
-    for (int j=0; j < 32; j++)
-        total += myArray[i][j]; // GOOD! Fast!
-
-for (int i=0; i < 32; i++)
-    for (int j=0; j < 32; j++)
-        total += myArray[j][i]; // BAD! Slow!
-```
-
----
-
-## Step 4 - Use tools to find slow bits
-
-
----
-
-# Finding Hot Paths -  Using Tools
-
-Tools do a good job of finding code that is slowing things down.
-
-
-![image](assets/images/hot-path.png) <!-- .element width="80%"  -->
-
-
----
-
-# Bottlenecks
-
-- The key aim with tools is bottleneck identification.
-- Once you find a bit of your code that is impacting performance, you need to identify what, if anything, can be done about it.
-- Often, these bottlenecks are loops that are processing lots of data.
-- Even a small tweak here can make all the difference.
-
-
- ![image](assets/images/bottleneck.jpg)
-
-
----
-
-# Algorithmic Analysis
-
-- And this is where algorithmic analysis can come in.
-- Abstractly measuring your algorithms, finding more efficient algorithms, and optimising the algorithms you have is important.
-- See your Algorithms and Data Structures material for more insight.
-
-
- ![image](assets/images/alg-analysis.jpg)
-
-
----
-
-## Step 5 - Optimise function calls
-
-
----
-
-# Function Calls Cost
-
-- Function calls have a cost associated with them.
-- Two things have to happen.
-    1.  Set up the parameters on the stack -  copy data.
-    2.  Jump to the new code position.
-- On return there is a jump back again.
-
-
- ![image](assets/images/function-call.png) <!-- .element width="25%"  -->
-
-
----
-
-# `static` Local Functions
-
-- A `static` function is one that exists within a certain context or
-    scope (e.g. class scope).
-
-- If a function is `static` in a C++ code file, the compiler knows it
-    can try and optimise it without affecting external code.
-
-- Effectively, rearranging and possible inlining can occur, speeding
-    up the program.
-
-```cpp
-    static int add(int x, int y)
-    {
-        return x + y;
+    
+    TcpSocket client;
+    if (listener.accept(client) != Socket::Done) {
+        cout << "Server could not accept connection" << endl;
+        return -1;
     }
+    return 0;
+}
 ```
 
 
 ---
 
-# `virtual` Function Calls
-
-- `virtual` functions have an additional cost.
-- A `virtual` function call involves a lookup on the object to determine which function to call.
-- Effectively we are double jumping in this instance.
-
-
- ![image](assets/images/virtual-function.png)
-
-
----
-
-#  `const` What You Can
-
-- Basically set everything you can to `const`.
-- A `const` method is one that will not change the object.
-- Therefore the compiler can optimise the code based on access again.
+# SFML Networking Client
 
 ```cpp
-    class my_class
-    {
-    public:
-        void do_work() const
-        {
-            // Do something
-        }
-    };
+#include <iostream>
+#include <SFML/Network.hpp>
+
+using namespace std;
+using namespace sf;
+
+int main(int argc, char **argv) {
+    TcpSocket socket;
+    Socket::Status status = socket.connect("127.0.0.1", 5000);
+    if (status != Socket::Done) {
+        cout << "Error - could not connect to server" << endl;
+        return -1;
+    }
+    return 0;
+}
 ```
-
----
-
-## Step 6 - Branching and Loops
-
-
----
-
-#  Branching
-
-- A branch (an `if` statement of loop) has a cost to check and a cost to jump.
-- If possible, use a switch statement instead of if/else if/else if/...
-
-```cpp
-    if (value == sth) { /* Do work */ }
-	else if (value == sth_else) { /* Do other work */ }
-	...
-	else { /*fallback*/}
-	// OR
-	switch(value)
-	{
-		case sth: /*do work*/ 
-			break;
-		case sth_else: /*do other work*/ 
-			break;
-		default:
-			break;
-	}
-```
-
-
-
----
-
-# `for` Loops
-
-- For loops are one of the most expensive parts of your application due to the number of iterations.
-- They are also one of the best places to optimise -  we will look at parallelisation here also.
-- One particular point is avoiding doing work that the loop statement can do -  such as the indexer.
-
-```cpp
-    // Multiply every iteration
-    for (int i = 0; i < 10; ++i)
-        cout << i * 10 << endl;
-
-    // Add every iteration
-    for (int i = 0; i < 100; i += 10)
-        cout << i << endl;
-```
-
----
-
-## Step 7 - Use more cores!!!
-
-
----
-
-# Just Throw Some Threads at the Problem!?
-
-- A simple solution may be to use more of your hardware resources.
-- Multi-core means you can execute code in parallel in different cores at the same time
-- There are different techniques: OpenMP, parallel STL algorithms (C++17), async, threads, etc
-    - More on SET10108: Concurrent and Parallel Systems
-
----
-
-# Cost of Threads
-
-- Threads do have costs: performance, cognitive and maintenance
-- They require memory, and switching between threads costs time
-- They can easily introduce bugs into your application
-- Keeping track of application workflow with threads is harder
-
----
-
-## Summary
-
 
 ---
 
 # Summary
 
-- Performance optimisation is important, but you need to be careful. 
-- Premature optimisation is the root of all evil, but think of your algorithm choices.
-- Use tools to identify bottlenecks. Fix if needed.
-- Most impactful optimisation is not running code at all (dirty/alive flags, etc).
-- Low-level optimisations are typically an illusion that makes your code less readable.
-- High-level optimisations can have the greatest effect, and they happen "on paper".
-- Parallelisation is great, and is also a can of worms. Tread carefully.
+- The throughput of messages needs to be smaller than the bandwidth
+- You can't send at every update all the game informations.
+- Define a communication protocol: the messages format.
+- If TCP is to slow try to use UDP but you will have to handle manually networking errors.
+- The most common and basic model is the Client/Server which is the one implemented in SFML. 
+
+

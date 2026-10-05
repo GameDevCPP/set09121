@@ -1,5 +1,5 @@
 ---
-title: "Lecture 9 - C++ Memory"
+title: "Lecture 9 - Design Patterns"
 keywords: Lecture
 tags: [Lecture]
 permalink:  lecture9.html
@@ -10,632 +10,634 @@ presentationTheme: '/assets/revealJS/css/theme/napier.css'
 <section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
 <textarea data-template>
 
-# Lecture 9 - C/C++ Memory and Resources
+# Lecture 9 - Design Patterns
 ### SET09121 - Games Engineering
 
 <br><br>
-Babis Koniaris
+Leni Le Goff
 <br>
 
 
 School of Computing. Edinburgh Napier University
 
 
-
 ---
 
 # Recommended Reading
 
-- Game Coding Complete, 4th Edition. McShaffry and Graham.
- - Chapter 3 introduces some ideas.
- - Chapter 8 covers resource management.
+Game Programming Patterns - Robert Nystrom
 
-![image](assets/images/game_coding_book.jpg) <!-- .element width="30%"  -->
+![image](assets/images/game_patterns_book.jpg)
 
-
----
-
-# Basics of Memory
 
 
 ---
 
-# Different Memory Types
+# Review of UML
 
-- C++ (and applications in general) have three types of memory.
- - static (global) :   memory where global and static values are stored.
- - stack :   working memory.
- - heap (free-store) :   the rest of memory.
-- Each has a different purpose and features.
+
+---
+
+# What is UML?
+
+- UML stands for the Unified Modelling Language.
+- UML allows us to model software from various viewpoints. <!-- .element: class="fragment" -->
+    - The structure of the software.
+        - Class diagram.
+    - The behaviour of the software.
+        - Use case diagram.
+        - Activity diagram.
+        - State diagram.
+    - The interaction within the software.
+        - Sequence diagram.
+- UML can be integrated into any software development process. <!-- .element: class="fragment" -->
+    - Analysis and requirements gathering.
+    - System design.
+- UML essentially provides a schematic of our software. <!-- .element: class="fragment" -->
+
+---
+
+# When to Use UML
+
+- Five useful diagrams:
+    - **Use case** diagrams: overall requirements gathering.
+    - **Activity** diagrams: flow chart of behaviour.
+    - **Class** diagrams: main system design.
+    - **Sequence** diagrams: individual steps and interaction between components.
+    - **State** diagrams: model object or system state.
+- **Use diagrams whenever possible!**
+Useful article: [geeksforgeeks.com - UML introduction](https://www.geeksforgeeks.org/system-design/unified-modeling-language-uml-introduction/)
+
+
+---
+
+# What are Design Patterns?
+
+- A design pattern is a **reusable solution** to a **commonly occurring problem** when designing software.
+- Reusable is the key here. <!-- .element: class="fragment" -->
+    - Engineering is about reusing existing solutions whenever possible.
+    - Other engineering disciplines have reusable solutions to given problems.
+- When we look at our software development problems from a high enough abstraction level we will see lots of areas of reuse. <!-- .element: class="fragment" -->
+
+![image](assets/images/software_development.png) <!-- .element width="45%"  -->
+
+---
+
+# Useful Design Patterns for Games
+
+---
+
+# Types of Patterns
+
+- Design patterns can be divided into a number of categories based on the type of problem they try and solve.
+ - **Creational** patterns
+    - Used for, or dictate, object creation mechanisms.
+ - **Structural** patterns,
+    - Used to dictate how objects are composed to form larger structures.
+ - **Behavioural** patterns,
+    - Used to control common communication patterns between objects.
+- You'll likely already know at least one pattern from each of these categories.
+
+---
+
+# Singleton
+
+---
+
+# Singleton Pattern
+
+**Problem**: How to ensure that only one instance of a given class ever exists?
+
+- The pattern is good when we want to control and coordinate particular operations in our system.
+    - E.g. A game only has one GameController for tracking gamestate and flow.
+    - Our game engine wants to ensure control over game entities at particular stages.
+- Singletons are good for providing a centralised approach to access a particular part of the system.
+    - Almost like providing a global attribute.
+- There are numerous approaches to ensure Singleton behaviour.
+
+---
+
+# Singleton Pattern 
+
+![image](assets/images/singleton.png) <!-- .element width="80%"  -->
+
+(Source: https://en.wikipedia.org/wiki/Singleton_pattern)
+
+---
+
+# Singleton Pattern 
 
 ```cpp
-// Allocated in global memory.
-int x = 10;
-
-int main(int argc, char **argv)
+class EntityManager
 {
-    // Allocated on the stack.
-    int y = 20;
-    // Allocated on the heap (free store)
-    int *z = new int(30);
-    
-    return 0;
-}
-```
-
-
----
-
-# Scope and Stack 
-
-![image](assets/images/stack-heap.png)
-
-
----
-
-# Scope
-
-```cpp
-void function(int param_scope){
-    // Main scope of the function
-    int main_scope = 5;
+public:
+    static EntityManager& get_instance()
     {
-        // Scope A - can see main scope
-        int A_scope = 10;
-        {
-            // Scope B - can see scope A and main
-            int B_scope = 20;
-        } 
-        // B_scope removed from stack
-        {
-            // Scope C can see scope A and main, Scope B is no longer valid
-            int C_scope = 30;
-        } 
-        // C_scope removed from stack
-    } 
-    // A_scope removed from stack
-} 
-// param_scope and main_scope removed from stack
-```
-
-
----
-
-# Memory Layout
-
-- Memory is obviously just one big chunk.
-- Addressed from `0x00000000` (0) to `0xFFFFFFFF` (4,294,967,295 in 32 bit systems).
-- Memory is separated: stack at the top and the heap at the bottom.
-- Jumping around the heap can be a major source of performance reduction (cache miss)
-
-![image](assets/images/mem-layout.png)
-
-
----
-
-# Memory Access Times
-
-- The CPU is fastest when accessing adjacent memory.
-- If we jump around things slow down - sometimes dramatically.
-- Consider a multi-dimensional array:
-- Access time difference between approach A and C can be 100x.
- - i.e. accessing all members using approach A could be 300ns; approach C 30000ns.
-
-
-```cpp
-int matrix[100][100][100];
-// A
-matrix[0][0][0] = 0;
-matrix[0][0][1] = 1; // 4 byte jump.
-// B
-matrix[0][0][0] = 0;
-matrix[0][1][0] = 1; // 400 byte jump.
-// C
-matrix[0][0][0] = 0;
-matrix[1][0][0] = 1; // 40000 byte jump
-```
-
-
----
-
-# Memory Alignment
-
-- The CPU also reads memory in fixed chunks.
-- If a value is not aligned to these chunks, extra reads occur.
-- Unless you do Weird Stuff with pointers and allocation, this will not be an issue
-
-![image](assets/images/mem-align.jpg) <!-- .element width="95%"  -->
-
-
----
-
-# Memory Restrictions
-You must consider the limits you have in memory.
-
- - **stack size** - depends on compiler and OS, can be set.
-  - Windows is ~1MB.
- - **thread stack size** -  as above, but normally smaller.
- - **main memory** -  commonly ranges from 8GB to 32GB at present.
- - **virtual memory** -  if main memory runs out, the (slow) HDD used.
-  - 64bit OS can address ~16.8 million petabytes of memory.
-  - If you are using virtual memory you shouldn't be.
-
-
----
-
-# Caches
-
-- Different levels of cache replicate memory closer to the CPU to reduce access time.
-- If data is in L1 cache can be accessed in about 0.5ns; main memory about 100ns.
-
-![image](assets/images/mem-cache.png) <!-- .element width="95%"  -->
-
-
----
-
-# Working with Memory in C
-
-
----
-
-# C Memory Management
-
-There are two functions of note
-
- - **malloc** - allocates space on the heap.
- - **free** - release space allocated.
-
-You need to release everything you allocate or ***memory leaks***.
-
-```cpp
-// Declare value
-my_data *data;
-// Allocate resource on the heap
-// Note the casting to the correct type.
-// Note we need the number of bytes to allocate
-data = (my_data*)malloc(sizeof(my_data));
-...
-// Do something with the data
-...
-// Free the resource
-// If we don't do this and lose the pointer we get a leak
-free(data);
-```
-
-
----
-
-# Pointer to and Dereference
-
-Let us look at a function that takes a pointer to an `int` as an argument.
-
-`void foo(int *x)`
-
-To pass in a variable we have to get its *address* (a pointer), and pass that, rather than the actual variable
-```cpp
-int v = 10; //declaration of value
-foo(&v); //pass in the address of v to foo
-```
-
-- Within the function we need to dereference the pointer to get access to the value.
- - `x` :   within `foo` this is a pointer - *the address of* `v`
- - `*x` :   allows access to the value stored in `x` - *the value of* `v`
-
-
----
-
-# Arrays in C
-
-- Arrays in C can be allocated on the stack or the heap.
-- Stack allocated arrays need a known size at compile time.
-- Heap allocated arrays can have any size - we just use `malloc`.
-- An array is just a pointer to memory where the array starts.
-```cpp
-    // Stack allocated array
-    // Known size at compile time
-    int x[10];
-    // Heap allocated array
-    // Size defined at run time
-    int *y = (int*)malloc(10 * sizeof(int));
-    // Access is the same
-    x[5] = 10;
-    y[2] = 20;
-    // Free is the same
-    free(y);
-```
-
----
-
-# REMEMBER:
-
-**An array is just a pointer to memory where the array starts!**
-
-This is really important, and can lead to all sorts of bugs if you forget!
-
-
----
-
-# Multidimensional Arrays in C
-
-- Multi-dimensional arrays can also be stack or heap allocated.
-- Multi-dimensional arrays are just an array of pointers.
-- Each pointer to array can have a different size.
-
-``` cpp
-// On the stack
-int x[10][10];
-// On the heap
-// Array of pointers
-int **y = (int**)malloc(10 * sizeof(int*));
-// Each array could be of different size
-for (size_t n = 0; n < 10; ++n)
-    y[n] = (int*)malloc(10 * sizeof(int));
-// Have to free each array
-for (size_t n = 0; n < 10; ++n)
-    free(y[n]);
-free(y);
-```
-
-
----
-
-# Copying and Pointing
-
-- The main reason we have pointers in C is to allow data to be sent around *without duplicating it*.
-- For large data objects this is a real problem.
- - Create object of 1MB size.
- - Call function with object - 1MB copy.
-- Pointers overcome this problem nicely - a pointer is 4 or 8 bytes (32-bit or 64-bit).
-- Pointers also enable data reuse, referencing, and better use of the heap.
-
-
----
-
-# Working with Memory in C++
-
-
----
-
-# C++ Memory Management
-
-- C++ memory management is a bit easier.
-- We don't need to know sizes, cast types, or even initialise separately.
-- Two keywords:
- - `new` :   allocates memory on the heap.
- - `delete` :   frees allocated memory.
-
-
-```cpp
-// Allocate a single value
-int *x = new int;
-// Allocate a single value and initialise
-int *y = new int(5);
-// Allocate an array
-int *z = new int[200];
-// Free a value
-delete x;
-delete y;
-// Free an array
-delete[] z;
-```
-
-
----
-
-# Copying and Referencing
-
-- C++ adds a reference type.
-- References are like pointers, but have some restrictions.
-- Effectively, we can pass-by-reference instead of pointer.
-- This means we avoid a copy again - reference is 4 or 8 bytes
-
-```cpp
-// A value
-int x = 5;
-// A pointer
-int *y;
-// Getting the address of a value
-y = &x;
-// A reference
-// Must reference a value
-int &z = x;
-// References don't have to be
-// dereferenced
-*y = 20;
-z = 20;
-```
-
-
----
-
-# Construction and Destruction
-
-- Memory allocation and deallocation in C++ calls constructors and destructors.
-- Knowing when and what can be important.
-- There are a lot of background functions called in C++ you have to be aware of.
-
-
-```cpp
-my_data do_work(my_data d) {
-    // Constructor called for x
-    my_data x;
-    // ...
-    // Move constructor called for x
-    return x;
-} // Destructor called for d and x
-
-int main(int argc, char **argv) {
-    // Constructor called for y
-    my_data y;
-    // Copy constructor called on y
-    // Move assignment operator called on return value
-    // Destructor called on return value
-    my_data z = do_work(y);
-    return 0;
-} // Destructor called on y and z
-```
-
-
----
-
-# Arrays in C++
-
-
-- C++ arrays are similar to C ones.
-- There are also other options in C++ though.
-- `array` type is statically sized, but acts more like a Java/C\# array. 
-- `vector` is dynamically sized (like an array list). 
- - Actually the best option in most cases. Data is automatically resized and on the heap.
-
-```cpp
-// Allocate stack array
-int x[100];
-// Allocate heap array
-int y[] = new int[100];
-int *z = new int[100];
-// Use new array type
-array<int, 100> a;
-// vector is dynamically sized
-// Can set initial size
-vector<int> v(100);
-```
-
-
----
-
-# Multidimensional Arrays in C++
-- Basically the same as in C, but can use other array types as well.
-
-```cpp
-int x[10][10];
-array<array<int, 10>, 10> y;
-vector<vector<int>> z(10);
-for (size_t n = 0; n < 10; ++n)
-    z[n] = vector<int>(10);
-```
-
-
----
-
-# Smart Pointers
-
-- Due to the pattern of allocation, deallocation, and keeping track of resources many programmers created in-house solutions to these problems.
-- This led to many implementations of self-managing pointers - "smart pointer" - that would do the work for the programmer.
-- The most popular implementation was seen in the Boost C++ libraries - Boost is known as the missing C++ API.
-- Eventually smart pointers were standardised and added to the C++11 standard.
-- It is now recommended you use smart pointers and not old (raw) pointers as standard.
-
-
----
-
-# `shared_ptr`
-
-- The most common smart pointer is `shared_ptr`.
-- This pointer counts the references to the resource.
-    - This is done by copy construction, destruction, etc.
-- It is the closest to the Java and C\# reference type.
-
-```cpp
-// Make shared_ptr
-shared_ptr<int> ptr = make_shared<int>(5);
-// Can derefence as normal
-int n = *ptr;
-// Can get raw pointer - no counting
-int *x = ptr.get();
-// Counter increased by one in call
-do_work(ptr);
-// End of call, counter decreased by one
-// Set pointer to nullptr; counter decreased by one
-ptr = nullptr;
-// Allocated resource now freed
-```
-
-
----
-
-# `unique_ptr`
-
-- `unique_ptr` ensures there is only one owner.
-- You cannot copy the pointer, only move it.
-- It is faster than `shared_ptr` and you should try and use it as much as possible.
-
-
-```cpp
-// Make unique_ptr
-unique_ptr<int> ptr = make_unique<int>(5);
-// Can derefence as normal
-int n = *ptr;
-// Can get raw pointer - no counting
-int *x = ptr.get();
-// Have to move data into function
-do_work(move(ptr));
-// If do_work does not do anything to
-// store data will be freed.
-// ptr is nullptr automatically on move
-```
-
-
----
-
-# Assignment, Copying, and Moving
-
-- We've hinted at a number of different concepts through this discussion.
-- Assignment is whenever you use the `=` to set an object variable.
-- Copying is when we create a new object from an existing one.
-- Moving is like copying, but we move the already allocated resources to the new object. The original becomes empty.
-- This is an important concept to understand in general in C++.
-- If you want to work at the lowest level of C++ you really need to recognise these behaviours for optimisation purposes.
-
-
----
-
-# Memory in Games
-
-
----
-
-# RAII
-
-- Resource Acquisition is Initialisation.
-    - On object's construction, object acquires resource.
-    - On object's destruction, object frees up resource
-- But!
-    - **Do not** give an entity a resource such as a loaded texture or audio clip.
-    - **Do** give an entity a pointer or reference to such a resource.
-    - Keep track of resources via central pools (we will look at a resource manager soon).
-    - Try to allocate those resources when the object is created (we will discuss this soon).
-
-
----
-
-# Data Sharing
-
-- Although referencing is efficient to reduce memory usage, it can be more expensive for memory access.
-- It is common to copy data between different contexts to improve efficiency.
-- For example having position data in the entity and the physics object.
-
-
-```cpp
-struct world_position {
-    vec3 position;
-    quat rotation;
-};
-struct physics {
-    vec3 position;
-    quat rotation;
-    vec3 velocity;
-    quat rotation_velocity;
-};
-
-Update(){
-    trans.position = phys.position;
-    trans.rotation = phys.rotation;
-```
-
-
----
-
-# Resource Management for Games
-
-
----
-
-# Game Resource Management
-
-- Games use a lot of resources.
- - Textures can be 100s of MB.
- - 3D model data can be 10s of MB.
- - Sound assets can be 100s of MB.
-- We need to avoid loading and unloading these assets all the time.
-- We also need to ensure that we only load the assets that are necessary.
-- To do this we will use a resource manager.
-
----
-
-# Resource Manager
-
-- So we need a resource manager in our game.
-- Its job:
- - Hide the details of how to load a specific resource.
-  - e.g. we just load - we don't need to know the individual calls to load a texture.
- - Manage allocation and deallocation of resources.
- - Provide a single point to manage all of this.
-    - Manager pattern, maybe singleton.
-- So we just apply our design pattern thinking to the problem.
-
-
----
-
-# Basic Operations
-
-- Our game resource manager needs only a few different operations:
- - `initialise` :   as most of our game engine components will likely have.
- - `load_resource` :   loads and/or retrieves a resource.
- - `unload_resource` :   unloads a loaded resource.
- - `clear_all` :   unloads all loaded resources.
-- That is all.
-- Depending on your approach:
- - You can have a singleton with typed loads, unloads, and storage
- - You can have a different resource manager for each type.
-
-
----
-
-# Storing Resources
-
-- We use lookup tables to store resources.
-- We need some kind of key, like a name.
-- The key is just matched to the actual resource.
-- We check that the resource isn't loaded before trying to return it.
-
-
-```cpp
-std::unordered_map<std::string, texture> textures;
-
-texture load_resource(const std::string& file){
-	auto it = textures.find(file);
-    if (it != textures.end()){
-        return it->second;
-    } else {
-        // Don't care how this works
-        texture t = load_texture(file);
-        textures[file] = t;
-        return t;
+        static EntityManager instance;
+        return instance;
     }
+private:
+    EntityManager(){}
+    EntityManager(const EntityManager&) = delete;
+};
+```
+
+Access to the EntityManager:
+```cpp
+EntityManager::get_instance();
+```
+
+---
+
+# Composite Pattern
+
+**Problem:** How to use in **the same way** **objects** and **compositions** of objects? 
+
+- Think of a tree: the whole tree, a node or a leaf should be usable the same way (recursive structure)
+- For example, elements in a UI can be a single element, called a **leaf** (e.g., a button), or a collection of other Elements, called a **composite** (e.g., a panel with buttons, etc.)
+    - This creates a **hierarchy** of UI elements.
+    - We tell the top UI element to update.
+    - The top UI element will tell the child elements to update, if it is a composite.
+    - Thanks to a common interface, we don't need to know whether we are dealing with a composite or leaf.
+
+---
+
+# Composite Pattern 
+
+![image](assets/images/composite.png) <!-- .element width="80%"  -->
+
+(Source: https://en.wikipedia.org/wiki/Composite_pattern)
+
+---
+
+# Composite Pattern 
+
+```cpp
+class UIElement { // Component
+public:
+    virtual void update()=0; // Operation
+};
+
+class Panel : public UIElement { // Composite
+private:
+    std::vector<std::shared_ptr<UIElement>> panel_elements;
+public:
+    void update() override {
+        for (std::shared_ptr<UIElement>& element : panel_elements) {
+            element->update();
+        }
+    }
+
+    // add(), remove(), getChild()...
+};
+
+class Button : public UIElement { // Leaf
+public:
+    void update() override {
+        ...
+    }
+};
+```
+
+---
+
+# Iterator Pattern
+
+**Problem:** How to iterate through a collection of elements in a **linear** way for **any type** of collection while protecting it.
+
+- One of the most useful (and oldest) patterns available.
+    - Create a collection.
+    - Add objects to collection.
+    - Iterate through collection when needed and perform individual actions.
+- If you don't create your own collection, you most likely do not have to create your own iterator.
+
+---
+
+# Iterator Pattern 
+
+![image](assets/images/iterator.png) <!-- .element width="80%"  -->
+
+(Source: https://en.wikipedia.org/wiki/Iterator_pattern)
+
+---
+
+# Iterator Pattern 
+
+```cpp
+// Iterator interface
+class Iterator {
+public:
+    virtual int next() = 0;
+    virtual bool has_next() = 0;
+};
+
+// Concrete Iterator
+class ConcreteIterator : public Iterator {
+public:
+    ConcreteIterator(const std::vector<int>& items) : items(items), position(0) {}
+
+    int next() override {
+        if (has_next()) {
+            return items[position++];
+        }
+        throw std::out_of_range("No more elements.");
+    }
+
+    bool has_next() override {
+        return position < items.size();
+    }
+private:
+    const std::vector<int>& items;
+    size_t position;
+};
+```
+
+---
+
+# Iterator Pattern 
+
+```cpp
+// Aggregate interface
+class Aggregate {
+public:
+    virtual std::unique_ptr<Iterator> create_iterator() const = 0;
+};
+
+// Concrete Aggregate
+class ConcreteAggregate : public Aggregate {
+public:
+    void add_item(int item) {
+        items.push_back(item);
+    }
+
+    std::unique_ptr<Iterator> create_iterator() const override {
+        return std::make_unique<ConcreteIterator>(items);
+    }
+private:
+    std::vector<int> items;
+};
+```
+
+---
+
+# Iterator Pattern 
+
+```cpp
+ConcreteAggregate numbers;
+numbers.add_item(10);
+numbers.add_item(20);
+numbers.add_item(30);
+numbers.add_item(40);
+
+std::unique_ptr<Iterator> iterator = numbers.create_iterator();
+
+while (iterator->has_next()) {
+    std::cout << iterator->next() << " ";
+}
+std::cout << std::endl;
+return 0;
+```
+
+---
+
+# Mediator Pattern
+
+**Problem:** How to define a **common communication** protocol between objects? And, how to implement **new communication** protocol **without having to change** the implementation of the objects?
+
+- Objects no longer communicate directly with each other, but instead communicate through the mediator.
+- This reduces the dependencies between communicating objects, thereby reducing coupling.
+- Mediator is very common pattern in GUI systems.
+    - Event based programming.
+    - Message passing. 
+- The mediator pattern is useful for building messaging systems as it detaches the components. It is a loose coupling approach.
+
+---
+
+# Mediator Pattern 
+
+![image](assets/images/mediator.png) <!-- .element width="80%"  -->
+
+(Source: https://javadevcentral.com/mediator-design-pattern)
+
+---
+
+# Mediator Pattern 
+
+```cpp
+class Colleague;
+
+class Mediator {
+public:
+    virtual void broadcast_message(const std::string& message,
+    Colleague* sender) = 0;
+};
+
+class Colleague {
+public:
+    Colleague(Mediator* mediator, const std::string& name) : mediator(mediator), name(name) {}
+
+    void send_message(const std::string& message) {
+        mediator->broadcast_message(message, this);
+    }
+    void receive_message(const std::string& message) {
+        std::cout << name << " received: " << message << std::endl;
+    }
+    std::string get_name() const {
+        return name;
+    }
+private:
+    Mediator* mediator;
+    std::string name;
+};
+```
+
+---
+
+# Mediator Pattern 
+
+```cpp
+// Concrete Mediator (Chat Room)
+class ChatRoom : public Mediator {
+public:
+    void add_participant(Colleague* colleague) {
+        participants.push_back(colleague);
+    }
+
+    void broadcast_message(const std::string& message, Colleague* sender) override {
+        for (Colleague* participant : participants) {
+            if (participant != sender) {
+                participant->receive_message(sender->get_name() + ": " + message);
+            }
+        }
+    }
+private:
+    std::vector<Colleague*> participants;
+};
+```
+
+---
+
+# Mediator Pattern 
+
+```cpp
+// Create a mediator (chat room)
+ChatRoom chat_room;
+
+// Create participants (colleagues)
+Colleague alice(&chat_room, "Alice");
+Colleague bob(&chat_room, "Bob");
+Colleague charlie(&chat_room, "Charlie");
+
+// Add participants to the chat room
+chat_room.add_participant(&alice);
+chat_room.add_participant(&bob);
+chat_room.add_participant(&charlie);
+
+// Participants send messages through the mediator
+alice.send_message("Hello, everyone!");
+bob.send_message("Hi Alice!");
+charlie.send_message("Good morning, folks!");
+```
+
+---
+
+# State Pattern
+
+**Problem:** How to change an object's behaviour when its internal state change? How to implement new behaviour without altering the other behaviours and the object itself?
+
+- For example the ghost in PacMan.
+    - Current state is chase PacMan.
+    - When PacMan eats a power pill the ghost changes state to evade PacMan.
+    - When power pill timer runs out state changes back to chase PacMan.
+- The different behaviours can be programmed in different objects. 
+- The ghost uses the behaviour specified in the state object when it updates.
+
+---
+
+# State Pattern 
+
+![image](assets/images/state.png) <!-- .element width="80%"  -->
+
+(Source: https://en.wikipedia.org/wiki/State_pattern)
+
+
+---
+
+# State Pattern 
+
+```cpp
+class Context; // Forward declaration
+
+// State Interface
+class State {
+public:
+    virtual void handle(Context& context) = 0;
+    virtual ~State() = default;
+};
+
+class ChaseState : public State { // Concrete state
+public:
+    void handle(Context& context) override;
+};
+
+class EvadeState : public State {
+public:
+    void handle(Context& context) override;
+};
+
+```
+
+---
+
+# State Pattern 
+
+```cpp
+class Context { // Context class that holds the current state
+public:
+    Context(std::shared_ptr<State> initialState) : state(initialState) {}
+
+    void set_state(std::shared_ptr<State> new_state) {
+        state = new_state;
+    }
+
+    void tick() {
+        state->handle(*this);  // Delegate behavior to the current state
+    }
+private:
+    std::shared_ptr<State> state;  // The current state
+};
+
+void ChaseState::handle(Context& context) {
+    if (/*pacman just ate power pill*/)
+        // Transition to evade state
+        context.set_state(std::make_shared<EvadeState>());  
+}
+
+void EvadeState::handle(Context& context) {
+    if(time_elapsed_since_evade_started < evasion_duration)
+        // Transition to chase state
+        context.set_state(std::make_shared<ChaseState>());  
 }
 ```
 
-**ALWAYS LOAD YOUR ASSETS AT THE START OF THE GAME/LEVEL!<br />DO NOT DO IT DURING A FRAME!**
+---
 
+# State Pattern 
+
+```cpp
+ Context pacman(std::make_shared<PacmanState>());
+ Context ghost(std::make_shared<EvadeState>());
+
+ while (true)
+ {
+     pacman.tick();
+     ghost.tick();
+ }
+```
 
 ---
 
-# Switching Levels
+# Strategy Pattern
 
-- A resource manager also allows you to manage loading and unloading between levels.
-- It works also for the other management components.
-- When switching levels:
-    - Unload entities.
-    - Unload physics resources.
-    - Unload assets.
-    - Load new assets.
-    - Set up new physics.
-    - Create new entities.
-- You do get better systems but the basic premise is the same.
+**Problem:** How to switch between algorithms at run-time seamlessly without modifying the object?
+
+- We use the strategy pattern when we want to use a different algorithm (strategy) to achieve **the same thing**.
+- A good example of the strategy pattern is different numerical integration method for physics simulation.
+    - They all achieve the same thing, but have different trade-offs in accuracy and performance.
+    - Games like Universe Sandbox allow the player to change the integration method at run-time.
+
+---
+
+# Strategy Pattern
+
+```cpp
+class Integrator {
+public:
+    virtual void step(float h) = 0;
+};
+
+class LeapFrog : Integrator {
+public:
+    void step(float h) override {} // use leapfrog verlet
+};
+
+class Euler : Integrator {
+public:
+    void step(float h) override {} // use explicit euler
+};
+
+class Simulator {
+public:
+    void update(float h) {
+        integration_method->step(h);
+    }
+private:
+    std::shared_ptr<Integrator> integration_method;
+};
+```
+
+---
+
+# Strategy Pattern with Lambda expression
+
+```cpp
+
+using Integrator = std::function<void(float)>;
+
+struct Integrators{
+    static Integrator leap_frog = [](float h){};
+    static Integrator euler = [](float h){};
+}
+
+class Simulator {
+public:
+    void update(float h) {
+        integrator(h);
+    }
+private:
+    Integrator integrator;
+};
+
+```
+
+---
+
+# Observer Pattern
+
+**Problem:** How to process/update a set of objects without having to go through all of them? 
+
+- We want to have a centralised repository and control point for a collection of objects.
+- The **subject** keeps track of all objects, the **observers**, and notifies them of any state changes.
+- The subjects are registered at runtime. 
+- Example: An entity manager that keeps track of all entities in a game.
+    - Entity manager is the subject.
+    - The entities are the observers.
+    - The entity manager calls methods like `update()` and `render()` each frame
+
+---
+
+# Observer Pattern 
+
+![image](assets/images/observerPattern.png) <!-- .element width="80%"  -->
+
+(Source: https://en.wikipedia.org/wiki/Observer_pattern)
+
+---
+
+# Observer Pattern 
+
+```cpp
+class Entity { // Observer
+public:
+    void update(float dt) {}
+    void render() {}
+};
+
+class EntityManager { // Subject
+    std::vector<std::shared_ptr<Entity>> entities;
+    void update(float dt) {
+        for (std::shared_ptr<Entity> &entity : entities) {
+            entity->update(dt);
+        }
+    }
+    void render() {
+        for (std::shared_ptr<Entity> &entity : entities) {
+            entity->render();
+        }
+    }
+    void register_entity(std::shared_ptr<Entity> entity) {
+        entities.push_back(entity);
+    }
+    void unregister_entity(std::shared_ptr<Entity> entity) {
+        // ... remove entity from entities vector
+    }
+};
+```
+
+---
+
+# Recognising Design Patterns
+
+- You will be surprised how often design patterns pop-up when developing software.
+- Some patterns are even built into languages and frameworks that you have used.
+    - Range-based for-loop in C++ uses iterators provided by the collection
+    - C# has events.
+    - Python has decorators.
+    - Java provides the observer pattern.
+- To recognise a pattern you need to first recognise the problem you are trying to solve.
+    - Again, this means doing a higher-level analysis.
+- If you find you are doing the same thing over and over again, chances are you have a pattern.
 
 
 ---
 
 # Summary
 
-
----
-
-# Summary
-
-- We've covered a lot of ideas today.
-- We looked at how memory works in general.
-- We looked at how memory is used in C.
-- We looked at how memory is used in C++.
-- The key take away is how we apply this to manage game resources.
-- You should be able to understand the basic premise of a resource manager, why we need it, and how it operates.
+- Design patterns are a very important tool in the software engineer's toolbox.
+    - Reusable solutions to particular problems.
+    - Simplify existing solutions.
+    - Patterns have proven usefulness.
+- Understanding design patterns is probably the most important skill you can pick up at this stage of your programming education.
+    - Object-oriented Software Development touched on these areas.
+- Knowing when and where to use a design pattern can save you a lot of effort.
+    - And there are a lot of potential patterns out there.

@@ -16,11 +16,13 @@ presentationTheme: '/assets/revealJS/css/theme/napier.css'
 ### Welcome
 
 <br><br>
-Babis Koniaris
+Leni Le Goff
 <br>
-(Original material by Kevin Chalmers/Sam Serrels/Thomas Methven)
+(Original material by 
+Kevin Chalmers/Sam Serrels/Thomas Methven/Babis Koniaris)
 
-School of Computing. Edinburgh Napier University
+School of Computing, Engineering and Built Environment. 
+Edinburgh Napier University.
 
 ---
 
@@ -33,7 +35,7 @@ School of Computing. Edinburgh Napier University
 * Many technical members of a games development team are called engineers. <!-- .element: class="fragment" -->
 * We are using the same analogies that are applied to software engineers. <!-- .element: class="fragment" -->
 * This module will focus on the development of a game engine <!-- .element: class="fragment" -->
- * Entity management, physics system, AI, other management functionality. <!-- .element: class="fragment" -->
+* Entity management, physics system, AI, other management functionality. <!-- .element: class="fragment" -->
 
 ---
 
@@ -57,17 +59,13 @@ School of Computing. Edinburgh Napier University
 
 
 * Because some people need to make Unity/Unreal! <!-- .element: class="fragment" -->
-
-
-* No, really. Engine teams are still a huge employment area <!-- .element: class="fragment" -->
-
-
-* Unity has an office in Edinburgh now! <!-- .element: class="fragment" -->
-
-
-* It's important for everyone to understand how engines work <!-- .element: class="fragment" -->
-
-
+* A lot of studios have in-house game engines: <!-- .element: class="fragment" -->
+    * Rockstar Advanced Game Engine (RAGE) 
+    * Wube Software - custom game engine for Factorio 
+    * UbiArt - Ubisoft Montpellier 
+    * No Man's Skye Engine - Hello Game 
+    * [https://github.com/raysan5/custom_game_engines](https://github.com/raysan5/custom_game_engines) 
+* Understanding how game engines works will make you a better game engineer <!-- .element: class="fragment" -->
 * It will help you even if you use a pre-made engine <!-- .element: class="fragment" -->
 
 ---
@@ -75,7 +73,7 @@ School of Computing. Edinburgh Napier University
 # Learning Outcomes
 
 
-- LO1: **Design, develop and evaluate** a games engine through *robust software engineering techniques* 
+- LO1: **Design, develop and evaluate** a game engine through *robust software engineering techniques* 
 
 - LO2: **Examine and evaluate** modern software *development, deployment, and testing procedures*.
 
@@ -93,13 +91,13 @@ School of Computing. Edinburgh Napier University
 
 # Structure – Lectures
 
-- Two one-hour lectures a week.  <!-- .element: class="fragment" -->
-    - Thursday 9am-11am, in D02, or Friday 2pm-4pm in A55
-- Lectures will cover:  <!-- .element: class="fragment" -->
-    - Game design concepts. 
-    - Software engineering for games.  
-    - Game technology.
-    - How our game engine works.
+* Two one-hour lectures a week.  <!-- .element: class="fragment" -->
+    * Monday 2pm-4pm in A17
+* Lectures will cover:  <!-- .element: class="fragment" -->
+    * Game design concepts. 
+    * Software engineering for games.  
+    * Game technology.
+    * How our game engine works.
 
 
 ---
@@ -107,8 +105,8 @@ School of Computing. Edinburgh Napier University
 # Structure – Practical Sessions
 
 - Two-hour practical session. <!-- .element: class="fragment" -->
-    - Tuesday 2pm-4pm, Thursday 11am-1pm or Friday 4pm-6pm
-- Practicals take place in D02. Bring your laptop or use the lab PCs. <!-- .element: class="fragment" -->
+    - Monday 4pm-6pm and Thursday 2pm-4pm in JKCC 
+- Practicals take place in JKCC. Bring your laptop or use the lab PCs. <!-- .element: class="fragment" -->
 - Labs will help you develop the engine you need to use for the coursework. <!-- .element: class="fragment" -->
     - 2D development with SFML.
     - Physics with Box2D.
@@ -120,25 +118,22 @@ School of Computing. Edinburgh Napier University
 
 # Coursework
 
-- Out Next Week (hopefully)!
-
 - Develop a game using the game engine.
     - **You cannot use one of our samples and just change the graphics**, or likewise with samples for SFML, Box2D, etc. – this will be a **FAIL**!
 
 - You will work with two partners, think who you might want to work with.
 
 - Coursework has four submissions.
-    - [Week ~4:] Game pitch presentation.
     - [Week ~7:] Game design document.
     - [Week ~13:] Implementation and report.
-    - [Week ~13:] Demo and peer assessment.
+    - [Week ~13:] Demonstration.
 
 
 ---
 
 # Support and Assessment
 
-| **Learning Outcome** | **Supported By** | **Assessed In** |
+| **Learning Outcome** | **Support** | **Assessment** |
 | --- | --- |--- |
 | LO1: Design, develop and evaluate a games engine through robust software engineering techniques. | Lectures, Practicals | Coursework |
 | LO2: Examine and evaluate modern software development, deployment, and testing procedures. | Lectures, Practicals | Coursework |
@@ -150,7 +145,6 @@ School of Computing. Edinburgh Napier University
 
 # Work Plan
 
-- We know every lecturer says it, but if you took Programming Fundamentals, Computer Graphics, or Physics, you will know we mean it.
 - You __**WILL**__ have to work around 14 hours per week on the module.
     - 4 hours of contact (lectures and practicals).
     - 10 hours of self-study.
@@ -190,9 +184,9 @@ School of Computing. Edinburgh Napier University
 
 # Not the Focus of the Module
 
-- **Introduction to C++ programming:** If you do not have experience with C++ then get a book to learn the basics quickly.  We will cover some concepts, but not the basics.
+- **Introduction to C++ programming:** If you do not have experience with C++ then get a book to learn the basics quickly.  
 - **Object-orientation:** We will refresh the basics in the context of C++ and games development, but if you require more knowledge then you are recommended to get a book.  You will likely learn more about object-orientation in this module by doing the work provided.
-- **Graphics and sound creation:** Although some websites will be pointed to, you are generally expected to find or produce your own content. 
+- **Graphics and sound creation:**  You are not expected to create your own graphics. A lot free assets exist on internet. Sound integration and design will not be covered in this module.
 
 
 ---
@@ -204,6 +198,7 @@ School of Computing. Edinburgh Napier University
 - Formal elements of games.
 - Systems dynamics.
 - Game entities and entity management.
+- Introduction to C++.
 - Object-orientation in C++.
 - Game design documents.
 - Design patterns for games.
@@ -221,7 +216,6 @@ School of Computing. Edinburgh Napier University
 - Steering behaviours.
 - State machines.
 - Decision trees.
-- QA and TRC.
 - Game testing.
 - Performance testing.
 - Performance optimisation.
@@ -237,15 +231,12 @@ School of Computing. Edinburgh Napier University
 - Git Workflow and CMake.
 - Introduction to SFML.  **Pong**.
 - Entity Management.  **Space Invaders**.
-- Tile Engine 1.  **Maze game**.
-- Tile Engine 2.  **PacMan**.
-- Physics and Resource Management.
+- Tile Engine and scene management.  **Maze game**.
+- Entity-Component Model.  **PacMan**.
+- Physics.
+- Platformer.
 - AI: Steering Behaviours and Pathfinding.
 - AI: Behaviour via State Machines and Decision Trees.
-- Deployment and Testing.
-- Performance Optimisation.
-- Networking.
-- Scripting.
 
 
 ---
@@ -327,13 +318,9 @@ School of Computing. Edinburgh Napier University
 
      Box2D provides the physics system for our game engine.  Again, you will need to use this resource when working with Box2D.
 
-- **C++:** http://www.learncpp.com
-
-     Modern C++ tutorials. Unofficial reference at http://www.cppreference.com
+- **C++:** Tutorials: http://www.learncpp.com and https://www.geeksforgeeks.org/cpp/c-plus-plus/; for reference: http://www.cppreference.com
 
 - **Game Programming Patterns:** http://gameprogrammingpatterns.com
-
-     Want to know more about the patterns we use and other patterns useful for games?  This website provides a number of examples.
 
 
 
@@ -345,11 +332,12 @@ School of Computing. Edinburgh Napier University
 ### Contact details:
 
 
-Babis: **b.koniaris@napier.ac.uk**
+Leni Le Goff: **l.legoff2@napier.ac.uk**
 
 
 - The best time to ask for help is during the practical sessions.
-- Try and complete the practical before the class and then ask questions during the lab time.
+- Ideally, try and complete the practical before the class and then ask questions during the lab time.
+- At least, you have to finish the lab during the week following the practical.
 - In other words: make sure you work on this outside the assigned time!
 
 
@@ -359,11 +347,9 @@ Babis: **b.koniaris@napier.ac.uk**
 		
 - I hope you have fun during the module.
 - The module has been designed to be challenging but with effort everyone can succeed.
-- But for everyone else we hope you will learn:
+- We hope you will learn:
     - How games work and how you can put them together.
     - How to do software engineering properly (from our point of view!)
-
-		
 
 </textarea>
 </section>

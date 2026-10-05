@@ -1,5 +1,5 @@
 ---
-title: "Lecture13"
+title: "Lecture 13 - Physics"
 keywords: Lecture
 tags: [Lecture]
 permalink:  lecture13.html
@@ -7,15 +7,14 @@ summary: lecture13
 layout: presentation
 presentationTheme: '/assets/revealJS/css/theme/napier.css' 
 ---
-
 <section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
 <textarea data-template>
-
-# Lecture 13 - Steering Behaviors
+{% raw  %}
+# Lecture 13 - 2D Physics
 ### SET09121 - Games Engineering
 
 <br><br>
-Babis Koniaris/Tobias Grubenmann
+Leni Le Goff
 <br>
 
 
@@ -24,344 +23,359 @@ School of Computing. Edinburgh Napier University
 
 ---
 
-# Recommended Reading
+# Recommended Reading (Optional)
 
 
-- Artificial Intelligence for Games. Second Edition. Millington and Funge (2009).
-- Whole chapter on steering behaviours.
+- Game Physics Engine Development, Millington.
+- If you ever want to build your own physics engine this is the book.
+- It does introduce some of the physics concepts well.
+- Not required for this module.
 
-![image](assets/images/ai_book.jpg)<!-- .element width="30%" -->
-
-
----
-
-## Review - Background Knowledge
+![image](assets/images/physics_book.jpg) <!-- .element width="30%" -->
 
 
 ---
 
-# Review - AI Techniques
+# What do we mean by game physics?
 
-- There are numerous usable AI techniques applicable to games development.
-    - Classical, deterministic techniques - popular.
-    - Academic, non-deterministic techniques - useful in some areas.
-- Different techniques accomplish different aspects of game behaviour.
-    - Movement.
-    - Decision making.
-    - Strategy.
-    - Learning.
-- Today we will look at the basics of movement via steering behaviours.
+<iframe width="1400" height="800" src="https://www.youtube.com/embed/xh6bhBAO7vQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ---
 
-# Review - Working with Vectors
+# What do we mean by game physics?
 
-- We have dealt with vectors for a long time now.
-    - Hopefully you understand them!
-- Steering behaviours rely on vector operations.
-    - We are generally trying to work out positions and velocity to move entities in a certain manner.
-- We will be performing numerous vector operations to support our steering behaviours.
-    - Adding and subtracting vectors.
-    - Getting the length of a vector.
-    - Normalizing a vector.
-    - Converting vectors to angles.
+<iframe width="1400" height="800" src="https://www.youtube.com/embed/tugbGpRqiFY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ---
 
-# Review - Basic Physics/Movement
+# Game Physics
 
-- Steering behaviours work with our physics engine.
-- Steering behaviours output a direction of travel.
-    - And a rotation if you want to use it.
-- We use this output to influence our entities.
-    - We can set the velocity directly.
-    - We can apply the output as a force.
-- Remember:
-    - Our physics engine is concerned with object movement.
-    - Our steering behaviours are also concerned with object movement.
-    - Therefore, combining the two is a good idea.
+- Game physics is really only a small subset of physics theory.
+- Game physics uses classical mechanics to provide the basic movement of objects in the game world.
+    - We will look at the Laws of Motion for example.
+- Other physics models are used in some areas of games.
+    - Fluid dynamics for example.
+- Most advanced rendering techniques rely on physics concepts.
+    - Optics, etc.
 
 
 ---
 
-## Steering Behaviours
+# Physics Engine
+
+
+
+- Game physics is almost always provided by a third-party engine.
+- It used to be that a game studio required someone with a Masters or PhD in Physics.
+- We will use Box2D as our physics engine.
+- There are a number of industry used, free, physics engines out there.
+
+![image](assets/images/box2d.png) <!-- .element width="30%" -->
+![image](assets/images/havok.png) <!-- .element width="30%" -->
+![image](assets/images/euphoria.jpg) <!-- .element width="30%" -->
 
 
 ---
 
-# What are Steering Behaviours?
+# Collision Detection
 
-- Steering behaviours are an AI technique that lets us program basic movement.
-    - Movement is often considered the base ability of a game AI.
-- Steering behaviours are actually very simple.
-    - They work on basic object positioning and rotation.
-- They provide an output which tells a game character which way to move.
-    - This can be considered the velocity of an entity.
-- There are numerous examples (see the recommended reading):
-    - Seek
-    - Flee
-    - Arrive
-    - Avoid obstacle
-    - etc.
+- Collision detection is not strictly part of a physics engine.
+- The physics engine concerns itself with resolving collisions.
+    - So we need to be able to detect them in the first place.
+- There are numerous techniques to detect collisions in 2D and 3D - from fast and more approximate to slow and more accurate.
+
+![image](assets/images/collision-detection.png) <!-- .element width="50%" -->
 
 
 ---
 
-# Example - Flocking
+# Particle Simulation
 
 
+- Particle simulation forms the basis of many physics engines.
+- Particles are simply simulated elements (points) that we can apply the Laws of Motion to.
+    - Particles have a position, velocity, acceleration, etc.
+- Particles are used for numerous graphical effects.
+    - For example, smoke, fire, explosions, water, etc.
 
----
-
-# Example - Flocking
-
-<iframe width="1400" height="800" src="https://www.youtube.com/embed/QbUPfMXXQIY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-
----
-
-# Example - Game
-
-<iframe width="1400" height="800" src="https://www.youtube.com/embed/J2hI_eGGmzg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+![image](assets/images/particle.jpg)<!-- .element width="60%" -->
 
 
 ---
 
-# Steering Behaviours
+# Rigid Body Dynamics
 
-- There are many steering behaviours out there.
-    - Refer to the AI book for some of the most useful.
-- You can even define your own if you like.
-- We will only look at four:
- - **Seek** : move towards a target.
- - **Flee** : run away from a target.
- - **Arrive** :   move towards a target and stop within a certain range.
- - **Face** : face the target.
+
+- Rigid bodies is about how geometric objects move and interact.
+- Unlike particles, rigid bodies have a shape. This means that they *translate* and *rotate*.
+- The bodies are rigid as they do not change shape, they are *not deformable*.
+
+![image](assets/images/rigid-body.jpg)
 
 
 ---
 
-# Seek
+# Bringing them Together
 
-
-- Very simple idea.
-- Move towards a target.
-- Calculation: 
-
-$$ d = target - position $$
-
-$$v = \hat{d} \times speed$$
-
-![image](assets/images/seek.png)
+- Collision detection (intersection testing) lets us find out which bodies have come into contact.
+- Particle physics allow us to control the motion of objects without taking into account their size and shape.
+- Rigid body dynamics let us model how geometric objects interact.
+- Rigid body dynamics also let us determine what happens when two objects collide: **Collision resolution**
+- Box2D provides these core features (and a bit more) so we can do almost any type of 2D physical effect you can think of.
 
 
 ---
 
-# Flee
-
-- Also simple - effectively the inverse of seek.
-- Run away from a target.
-- Calculation: 
-
-$$d = position - target$$
-
-$$v = \hat{d} \times speed$$
-
-![image](assets/images/flee.png)
+# Example - Collision Detection
+<iframe width="1400" height="800" src="https://www.youtube.com/embed/qTV3ZQgTnkg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ---
 
-# Arrive
-
-- Seek, but with a stopping distance to stop the wiggle.
-- Move towards target and stop when within a given distance.
-- Calculation: 
-
-$$d = target - position $$
-
-$$ \left\lVert d \right\rVert \leq radius \implies v = 0 $$
-
-$$ \left\lVert d \right\rVert > radius \implies v = \hat{d} \times speed $$
-
-
-![image](assets/images/arrive.png)
+# Example - Particle Simulation
+<iframe width="1400" height="800" src="https://www.youtube.com/embed/YeNeod0qfPY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ---
 
-# Face
-
-- A rotational steer.
-- Turn to face a target.
-- Calculation (simplified - there are more checks to do):
-
-$$d = target - position $$
-
-$$\theta = \arctan(d_y, d_x) $$
-
-$$r = (\theta - orientation) * rot\_{speed}$$
-
-![image](assets/images/face.png)
+# Example - Rigid Bodies
+<iframe width="1400" height="800" src="https://www.youtube.com/embed/LnvtZn2agmA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ---
 
-# Steering Behaviours in Our Engine
-
-- We want to build a reusable technique for steering behaviours.
-    - We want reusable so we can program as many steering behaviours as we like.
-- If you like you can go further and combine steering behaviours within a single steering behaviour.
-    - See weighted/combined behaviours in the recommended reading.
-
-
+# Example - Water Simulation
+<iframe width="1400" height="800" src="https://www.youtube.com/embed/zMTzWLGcPEk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ---
 
-# Steering Behaviour Interface
-
-- `steering_behaviour` is our abstract base class 
-    - would be interface in C#/Java
-- It only declares one pure virtual method:
-    - `get_steering`
-- `get_steering` performs the necessary calculation for the defined steering behaviour and outputs a `steering_output`.
-
-![image](assets/images/steering_interface.png)
+## Fundamentals - Laws of Motion
 
 
 ---
 
-# Steering Output struct
+# What are the Laws of Motion?
 
-- `steering_output` contains two values.
-    - `direction`:   the vector we want to travel in.
-    - `rotation`:   the angle we want to turn.
-- Results from `get_steering` are put in here.
-- We will not use rotation in the practical, but it is there if you need it.
-
-![image](assets/images/steering_output.png)
+- Game physics are underpinned by Newton's Three Laws of Motion.
+    - First described by Isaac Newton in the 17th century.
+- **Newton's laws of motion** are:
+    1.  Law of inertia
+    2.  Force produces motion ($F = ma$)
+    3.  Law of action and reaction
+- There are also Euler's Two Laws of Rigid Body Motion which we won't discuss here.
 
 
 ---
 
-# Example - Seek
+# Newton's First Law of Motion
 
-- We have two entities:
-    - `target` and `character`.
-- We have `max_speed`.
-- `get_steering` is:
+
+- Law of inertia:
+    - A body remains at rest, or in motion at a constant speed in a straight line, unless acted upon by a force.
+- Basically, if there is no force there is no change in velocity.
+
+- If $F_{net} = 0$ then there is no **change** in motion.
+- Where:
+    - $F_{net}$ is the combined force applied to the object.
+    - Opposite forces can cancel each other out.
+
+
+---
+
+# Newton's Second Law of Motion
+
+
+- Force produces motion
+    - When a body is acted upon by a force, it accelerates proportionally to its mass and the force applied, towards the direction of the force
+
+- This is an important calculation, and normally underpins most of the force calculation work in a physics engine.
+
+`$$ F = ma $$`
+
+where: $m$ is the mass, $a$ is the acceleration.
+
+Or:
+
+`$$a = \frac{F}{m}$$`
+
+
+---
+
+# Newton's Third Law of Motion
+
+- Law of action and reaction
+    - If two bodies exert forces on each other, these forces have the same magnitude but opposite directions.
+- The law comes into play when working with collision resolution.
+
+![image](assets/images/normal-force.png)
+
+
+---
+
+# Equations of Motion
+
+
+<div style="float: left;width: 40%;" > 
+
+`$$ v = u + at $$`<br>
+`$$ s = \frac{1}{2}(u + v)t $$`<br>
+`$$ s = ut + \frac{1}{2}at^2 $$`<br>
+`$$ s = vt - \frac{1}{2}at^2 $$`<br>
+`$$ v^2 = u^2 + 2as $$`<br>
+`$$ a = \frac{v - u}{t} $$`<br>
+
+</div>
+
+
+<div style="float: right;width: 60%;text-align: left;" > 
+These equations apply when $a$ is constant.<br>
+<br><br>
+\\\(s\\) : object displacement<br>
+\\\(u\\) : the initial velocity<br>
+\\\(v\\) : the final velocity<br>
+\\\(a\\) : the acceleration<br>
+\\\(t\\) :  (or \\(\Delta t\\)) : the time passed 
+</div>
+
+
+---
+
+# SUVAT
+
+![image](assets/images/suvat.jpg) <!-- .element width="100%"  -->
+
+
+---
+
+# Simple Gravity
+
+- On a planet, gravity is a downward force applied to an object.
+- Gravitational acceleration $g$ at sea level is approximately equal to $9.82m/s^2$.
+    - As a 2D vector this is $<0, -9.82>$.
+
+
+---
+
+# Weight and Mass
+
+- We use the terms weight and mass interchangeably in everyday language.
+- In physics, weight and mass are different.
+- Weight is the downward force applied to an object due to gravity and the object's mass.
+- Mass is the measure of how much matter is in an object. 
+- We use $kg$ for mass. Less gravity means less weight, but the mass will remain the same.
+
+$w = mg$ 
+
+Where: $w$ is weight, $m$ is mass, $g$ is gravity.
+
+
+---
+
+# Forces
+
+
+- Weight is a force. A force is considered to be any influence that can affect the velocity of an object.
+- Like acceleration $g$, a force is also defined as a vector, having a direction and magnitude.
+- A Newton is a standard unit of force applied to an object.
+
+$$1N = 1kg \times m/s^2$$
+On Earth: $$g = 9.8 m/s^2$$ so: $$\frac{1N}{g} = 0.102kg $$ $$ 1kg \times g = 9.8N $$
+
+
+---
+
+# Adding Forces
+
+
+- When applying forces, we are typically concerned with accumulated force for a particular frame.
+- Adding forces is just a case of adding the vector forces together and applying the resultant net force to the object.
+
+![image](assets/images/adding-forces.png)
+
+
+---
+
+# Force Examples
+
+- Springs are commonly used for a number of effects - they do exactly what you think.
+- In games, springs are used for deformable shapes and bounce effects.
+
+Hooke's Law: $$F = -k\Delta s$$ where $k$ is the stiffness of the spring and $s$ the displacement from the resting length.
+
+- Drag is another force that is caused by air resistance (or any other medium, e.g. liquid)
+- Games will use a simplified model of drag:
+
+$$F_{drag} = -\hat{\textbf{v}}(k_1\lVert\textbf{v}\rVert + k_2\lVert\textbf{v}\rVert^2)$$
+
+
+---
+
+# Impulses
+
+- Impulses are changes in an object's momentum
+    - "Force acting over time"
+    - Momentum: $p = F\Delta t$
+- We can use them instead of forces to handle collision resolution.
+
+---
+
+# Impulses (cont.)
+
+- Using *impulse* is a easier way to handle change in velocity of an object than using *force*. 
+
+$$ p = F\Delta t $$ <br>
+$$ \equiv p = ma(t_2-t_1) $$<br>
+$$ \equiv p = m(v_2 - v_1) $$ <br> 
+$$ \equiv v_2 = p/m + v_1 $$ <br>
 
 
 ```cpp
-steering_output output;
-output.direction = target.get_position() - character.get_position();
-output.direction = normalize(output.direction);
-output.direction *= max_speed;
-output.rotation = 0.0f;
-return output;
+void physics_update(double delta_t){
+    velocity += impulse/mass;
+    position += velocity*delta_t;
+}
 ```
-
-![image](assets/images/seek_class.png)
-
-
----
-
-# Example - Flee
-
-
-- We have two entities:
-    - `target` and `character`.
-- We have `max_speed`.
-- `get_steering` is:
-
-```cpp
-steering_output output;
-output.direction = character.get_position() - target.get_position();
-output.direction = normalize(output.direction);
-output.direction *= max_speed;
-output.rotation = 0.0f;
-return output;
-```
-
-![image](assets/images/flee_class.png)
-
-
----
-
-# Combining Steering, Decisions, and State
-
-- Next we are going to discuss decision making and behaviour control using state machines and decision trees.
-- We will be looking at combining these ideas to create a sophisticated looking AI.
-    - We will look at this in more detail next week.
-- The idea we will look at is when we make a decision (via a decision tree) we will change state.
-    - For example, if we decide we are under attack we change our state to engage.
-- We can consider that the behavioural states also contain a steering behaviour if necessary.
-    - For example having a seek state.
-
-
----
-
-# Example - The Sophisticated Guard
-
-- The guard has some basic actions:
-    - The guard patrols between point A and point B.
-    - The guard has a 20% chance of stopping while patrolling.
-    - If the guard is shot at, the guard will stop patrolling, engage the player, and fire back.
-    - If the guard sees the player, the guard will engage the player.
-    - If engaged and the player is far away, the guard will seek the player.
-    - If health is low, the guard will flee from the player.
-    - If the guard loses sight of the player, the guard will return to patrolling between point A and point B.
-
-
----
-
-# Example - The Sophisticated Guard Diagram
-![image](assets/images/sophisticated_guard.png)
-
-
----
-
-# Combining Steering Behaviours
-
-- We can also combine steering behaviours to create more elaborate movement.
-    - This is how flocking works.
-- Remember that we can add vectors together quite happily.
-    - This will give us a mean direction of travel.
-- We can combine steering behaviours normally.
-    - For example combined seek and face.
-- Or we can weight the steering behaviours.
-    - 0.8 seek.
-    - 0.1 align.
-    - 0.1 obstacle avoidance.
-
-
----
-
-# Comments on Steering
-
-- Steering behaviours are very simple.
-    - They are also very fast to calculate.
-- They can also be very powerful.
-    - Combining steering behaviours can lead to rich, complicated movement.
-- They also underpin the basis of many AI techniques.
-    - Path finding uses a path following steering behaviour.
-    - State machines and decision trees can determine which steering behaviour to perform.
-- Steering behaviours by themselves can lead to weird behaviour.
-    - Remember some of the path finding examples.
 
 
 ---
 
 # Summary
 
-- As always, we have only really scratched the surface of steering behaviours.
-    - There are numerous other behaviours out there.
-- Basic steering is good, but quite simple.
-- We normally want to combine behaviours.
-    - Weighted.
-    - Flocking.
-- Consider what behaviour you want, and just program the movement.
-    - Do not worry about complexities.
+**Warning**
+
+- Physics effects look good in your game, provide nicer looking movement, and can be used for gameplay. However...
+- Physics calculations can be expensive.
+    - They also don't always scale well due to the potential number of object interactions.
+- Collision detection is also expensive.
+- Be smart! Don't have lots of physical effects on the screen at one time - this can really hit performance!
+
+---
+
+# Summary
+
+**Warning (cont.)**
+
+- Physics engines are not always the best way to make your game *fun*.
+- This is particularly true if your engine is not deterministic. <!-- .element: class="fragment" -->
+- Think about games like Sonic the Hedgehog: <!-- .element: class="fragment" -->
+ - Movement should feel good <!-- .element: class="fragment" -->
+ - Movement should be repeatable <!-- .element: class="fragment" -->
+ - Sonic isn't controlled by a physics engine <!-- .element: class="fragment" -->
+ - (But gravity is applied!) <!-- .element: class="fragment" -->
+
+---
+
+# Summary
+
+- We have taken a very broad overview of what we mean by game physics.
+    - Laws of Motion.
+    - Particles.
+    - Rigid bodies.
+    - Collisions.
+- Box2D will provide us with all these features and more - you just need to explore it.
+- The physics lab will introduce most of these ideas practically.
+
+{% endraw %}

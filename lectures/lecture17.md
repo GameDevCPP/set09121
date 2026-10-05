@@ -7,214 +7,278 @@ summary: lecture17
 layout: presentation
 presentationTheme: '/assets/revealJS/css/theme/napier.css' 
 ---
-
 <section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
 <textarea data-template>
 
-# Lecture 17 - Releasing your game
+# Lecture 17 - State Machines
 ### SET09121 - Games Engineering
 
 <br><br>
-Babis Koniaris/Tobias Grubenmann
+Leni Le Goff
 <br>
 
 
 School of Computing. Edinburgh Napier University
 
 
-
 ---
 
-## Release builds
-
-![image](assets/images/gold-master.jpg) <!-- .element width="60%"  -->
+# Recommended Reading
 
 
----
 
-# Green Go button 
-Moving beyond the Green button.
+- Artificial Intelligence for Games. Second Edition. Millington and
+    Funge (2009).
 
-![image](assets/images/build_options.png) <!-- .element width="95%"  -->
+
+ ![image](assets/images/ai_book.jpg)
 
 
 ---
 
-# Runtime Resources 
-
-![image](assets/images/build_folder.png) <!-- .element width="70%"  -->
+## Review - State and State Machines
 
 
 ---
 
-# Release Builds 
+# Review - State Diagrams
 
-Tidy up before you ship
-
-- Hide CMD window <!-- .element: class="fragment" -->
-- Don't assume resolution <!-- .element: class="fragment" -->
-- Pipe Exceptions to an error popup window <!-- .element: class="fragment" -->
-- Turn off any developer cheats <!-- .element: class="fragment" -->
-
-This should ideally be done automatically <!-- .element: class="fragment" -->
-
-
----
-
-# Runtime Resources 
-
-What does your game need, and where does it look for it?
+- State modelling is one of most the important aspects in computing!
+    - Software development (object/component state).
+    - AI (state machines).
+    - Networking (protocol and hardware development).
+    - Software verification (state-space search).
+- Understanding and modelling application state is one of the most important skills and tasks you can do.
+- State modelling also provides dynamic behaviour.
 
 
 ---
 
-# Static vs Dynamic Linking
+# Review - State Diagrams
 
-**Static Linking**
-- Larger .exe file  <!-- .element: class="fragment" -->
-- No .dll / .so's generated <!-- .element: class="fragment" -->
-- Potential for better compiler optimisation <!-- .element: class="fragment" -->
-- Lock the version of libs <!-- .element: class="fragment" -->
 
-**Dynamic (Shared) linking**
-- Smaller .exe file <!-- .element: class="fragment" -->
-- Libraries compiled to .dll <!-- .element: class="fragment" -->
-- can reuse and share dlls already on the system <!-- .element: class="fragment" -->
-- Modders can hack/swap out your .dlls. <!-- .element: class="fragment" -->
+![image](assets/images/state_diagram.png) <!-- .element height="70%"  -->
 
 
 ---
 
-# Asset Pipeline During Development Vs Release
+# Review - State Design Pattern
 
-* During **development**: 
-	* Assets need to be frequently iterated on/edited
-	* Assets need to be in an artist-friendly form
-	* Heavy/slow compression hurts iteration times
-
-* At **release**:
-	* Assets are not modified anymore
-	* Assets need to be in optimal form for game execution
-	* Heavy compression is fine, as long as decompression does not hurt load times
-	
-* Examples: 
-	* texture/mesh/sound compression
-	* ... or conversion	to game-ready formats
----
-
-# Asset Pipeline Out There
-
-* AAA studios do complicated things here. 
-
-* Even UE4/Unity have complicated final "cooking" steps. 
-
-* This should all be automated - more on this later 
-
-* You probably do not need a custom asset pipeline
+- The state design pattern allows us to encapsulate an object's state within another object.
+- We can switch the state object at any time during runtime - changing the behaviour of the object.
+- For example the ghosts in PacMan change behaviour.
+- Different behaviours are programmed in different objects - the ghost simply calls the state class when it updates.
 
 ---
 
-# Installers
+# Review - State Design Pattern
 
-Why?  You could just deploy your game as a Zip file
-
-1.  Contain all your game files inside a single runnable .exe file - typically compressed. <!-- .element: class="fragment" -->
-2.  Show a dialogue wizard of some kind that let's the user select an installation folder. <!-- .element: class="fragment" -->
-3.  Extract your game files to the selected folder. <!-- .element: class="fragment" -->
-4.  Optionally create desktop/Start Menu Shortcuts. <!-- .element: class="fragment" -->
-4.  Install dependencies / registry values. <!-- .element: class="fragment" -->
+ ![image](assets/images/state.png)
 
 ---
 
-# Running as Admin 
+# Review - AI Techniques
 
-### HINT - This has been a recurring issue.  
-
-Windows requires elevated permissions to touch `C:\Program Files` <!-- .element: class="fragment" -->
-
-The only time your game should need Admin Privileges is the installer, and it should work without it if a user installs to a non-protected space. <!-- .element: class="fragment" -->
-
-Consider where your save game files will go. <!-- .element: class="fragment" -->
-
-Perhaps look at where loads of other games save stuff? <!-- .element: class="fragment" -->
-
----
-
-# How
-
-![image](assets/images/nullsoft.jpg) <!-- .element width="80%"  -->
+- There are numerous usable AI techniques applicable to games development.
+    - Classical, deterministic techniques - popular.
+    - Academic, non-deterministic techniques - useful in some areas.
+- Different techniques accomplish different aspects of game behaviour.
+    - Movement.
+    - Decision making.
+    - Strategy.
+    - Learning.
+- Today we will look at the basics of decisions via state machines.
 
 
 ---
 
-# Un-Installers 
+# Example - Batman: Arkham Asylum
 
-Make sure they work, and are added to Windows correctly.
-
-
----
-
-## Continuous Integration
+<iframe width="1400" height="800" src="https://www.youtube.com/embed/hNs-orQHaKU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ---
 
-# Continuous Integration Benefits
+# What are State Machines?
 
-- Ground Truth - no more "works on my machine"
-- Alerts on broken builds - especially useful for multi-platform
-- Signpost to others that your software still works
-- Links in well with Unit Testing
+- A state machine is a technique of describing and modelling the state (e.g. behaviour, control, etc.) of a system in a mathematical manner.
+- The system is modelled with a number of states and the transitions between these states.
+    - The idea of a graph of states can come into play here - remember our description of a graph last week.
+- Finite number of states &rarr; Finite State Machine (FSM)
 
----
-
-# Continuous Integration Disadvantages
-
-- Might cost you! You're using someone else's computer to do work
-- Can be a bit of a faff to set up...
-
-but...
-- It is a *good idea* that most companies of a certain size and above use.
-- Check out AppVeyor or Github Actions for a way to integrate (heh) this into your current workflow
 
 ---
 
-## Deployment Summary
+# State Machines for AI
+- Let us return to the guard concept we presented last week.
+- We will take a simple view so we can just focus on state.
+- The guard has some basic actions:
+    - The guard patrols between point A and point B.
+    - If the guard is shot at, the guard will stop patrolling, engage the player, and fire back.
+    - If the guard loses sight of the player, the guard will return to patrolling between point A and point B.
+    - If the guard is hit, the guard will fall onto the ground and die.
+
+
+
+---
+
+# State Machines for AI 
+
+![image](assets/images/simple_state_guard.png) <!-- .element width="100%"  -->
+
+
+---
+
+# State Machines for AI 
+
+![image](assets/images/sanctum_chart.png) <!-- .element width="100%"  -->
+
+
+---
+
+# Example - Maze Solving 
+
+![image](assets/images/maze.png) <!-- .element width="100%"  -->
+
+
+---
+
+# Example - Maze Solving
+
+- To solve a maze we can use a particular trick.
+    - This only works if the maze is simply connected, i.e., all the walls are connected to each other (taking into account the outer boundary).
+- "Follow the wall" strategy:
+    - Walk forward from the entrance until you hit a wall.
+    - Turn left.
+    - Now keep your right hand on a wall at all times.
+    - You will eventually reach the other exit.
+        - Although it will not necessarily be the fastest route.
+- This obviously also works if you swap left and right.
+
+
+---
+
+# Example - Maze Solving 
+
+
+![image](assets/images/maze_solve.png) <!-- .element width="100%"  -->
+
+
+---
+
+# State Machines in Our Game Engine
+
+- We will be implementing a basic, reusable state machine behaviour in our game engine.
+    - We want reusablility so that it is simple for us to extend the functionality, if required.
+- We have already identified the state design pattern as a likely candidate for implementation of state machine behaviour.
+- What we need to do is implement this pattern in a manner that works in our game engine.
+
+
+---
+
+# State Pattern in Our Engine
+
+![image](assets/images/state-class-diagram.png) <!-- .element width="100%"  -->
+
+
+---
+
+# `State` Interface
+
+- The `State` interface only defines one method:
+    - `Execute`
+- This method executes the behaviour associated with that state upon the owner of the state.
+    - We pass as arguments the `Entity` that owns the state and the delta time `dt`.
+    - This way, the state can operate on the owner in each frame.
+
+
+ ![image](assets/images/state_interface_no_template.png)
+
+
+---
+
+# `StateMachineComponent` Class
+
+- The `StateMachineComponent` is a `Component` that we can attach to an `Entity`.
+- The component contains and manages a collection of states.
+- The component calls the `execute` method on the current state.
+
+ ![image](assets/images/state_machine_no_template.png)
+
+
+---
+
+# `Update`
+
+- `Update` is where the main functionality of the state machine occurs.
+- It is just one line of code:
+    - Execute the current state.
+- We call `ChangeState` to change the current state.
+- We call `Update` to execute the current state.
+- Although simple, the key work we have done is to separate out and encapsulate the different behaviours into different objects.
+
+
+---
+
+# Decomposing State Machines
+
+- If a model has two or more properties it is worthwhile looking to see if they are independent.
+- If the properties are independent, it simplifies the logic to separate them into different state machines.
+    - You can do this - just have two `StateMachineComponent`s attached to an `Entity`.
+- For example:
+    - A ranger wanders in the wilderness.
+    - If the ranger is hungry, the ranger eats.
+    - If it is night, the ranger lights a torch to see.
+
+
+---
+
+# Decomposing State Machines
+
+
+![image](assets/images/ranger_all_states.png) <!-- .element width="65%"  -->
+
+
+![image](assets/images/ranger_decomposed_states.png) <!-- .element width="65%"  -->
+
+
+
+---
+
+# Comments on State Machines
+
+- FSMs are simple to use and understand.
+    - Advantageous in lots of circumstances.
+    - If you require degrees of intensity or "fuzziness" you will require a different AI technique.
+- FSMs are difficult to modify once in place.
+    - Small changes usually affect the entire FSM.
+    - You will generally need to rethink and rewrite your FSM code.
+
+
+---
+
+# State Machines for Game Control
+
+- We can extend our state machine implementation to work as a game controller.
+    - All you need is an update and a render method for each state, and call these in the main game's relevant method.
+- This allows you to trivially implement game screens:
+    - Menu.
+    - Main gameplay.
+    - etc.
+- The main game only calls update and draw on these elements of the game based on the state.
+- This is effectively what the scene management system is doing.
+
+
+---
+
+## Summary
 
 
 ---
 
 # Summary
 
-1. Make sure your game works in Release
-2. Understand everything your game needs to run.
-3. Make an Installer & Uninstaller
-4. Test your build automatically in the Cloud
-
-
----
-
-# TOP TIPS
-
-- Embed Version/Commit Numbers.
-- Automate Everything.
- - Avoid one-off mistakes, fix it once, it will always work
-- **Test it** 
- - Test it on new machines, old machines, fresh machines, 
- - Virtual machines, JKCC/VDS machines, your friends' machines
- 
----
-
----
-
-## IF YOUR CODE DOES NOT RUN ON MY MACHINE WHEN I TEST IT, YOU WILL LOSE MARKS!
-
----
-
-# TOP TIPS
-
-Test your code on other machines
-
-Check you have all the files included in the installer
-
-Check you have the right .dlls
+- We've taken a broad look at state machines and how they work.
+- We have also taken a look at how we will implement them in our game engine.
+- Really, the ideas here will be more understandable when you implement the system and play around with the functionality.
+- This can be used to underpin much of the AI behaviour we will look at - much like steering behaviours.
